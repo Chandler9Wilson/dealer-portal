@@ -5,14 +5,13 @@ CREATE USER catalog WITH PASSWORD 'catalog';
 GRANT ALL PRIVILEGES ON DATABASE acmonitor TO catalog;
 '''
 # has been run
-# TODO improve security
+# TODO improve security for deployment
 import sqlalchemy
 import datetime
 from sqlalchemy import Table, Column, Integer, String, Float, \
     Boolean, ForeignKey, DateTime
 
 
-# user, password should be added at some point
 def connect(user, password, db, host='localhost', port=5432):
     '''Returns a connection and a metadata object'''
 
@@ -28,6 +27,7 @@ def connect(user, password, db, host='localhost', port=5432):
     return con, meta
 
 
+# attaches all tables with column info to meta object
 def setup():
     facility = Table(
         'facility', meta,
@@ -66,4 +66,5 @@ con, meta = connect('catalog', 'catalog', 'acmonitor')
 print(con, meta)
 
 setup()
+# Tells the engine to add the meta object to the database
 meta.create_all(con)
