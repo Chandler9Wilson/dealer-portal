@@ -1,12 +1,14 @@
-# this assumes that 
+# this assumes that
 '''
 CREATE DATABASE acmonitor;
 CREATE USER catalog WITH PASSWORD 'catalog';
 GRANT ALL PRIVILEGES ON DATABASE acmonitor TO catalog;
-''' 
-#has been run
-import sqlalchemy, datetime
-from sqlalchemy import Table, Column, Integer, String, Float, Boolean, ForeignKey, DateTime
+'''
+# has been run
+import sqlalchemy
+import datetime
+from sqlalchemy import Table, Column, Integer, String, Float, \
+    Boolean, ForeignKey, DateTime
 
 
 # user, password should be added at some point
