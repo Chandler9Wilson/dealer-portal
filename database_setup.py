@@ -5,6 +5,7 @@ CREATE USER catalog WITH PASSWORD 'catalog';
 GRANT ALL PRIVILEGES ON DATABASE acmonitor TO catalog;
 '''
 # has been run
+# TODO improve security
 import sqlalchemy
 import datetime
 from sqlalchemy import Table, Column, Integer, String, Float, \
