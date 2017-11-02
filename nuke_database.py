@@ -4,6 +4,7 @@ import sys
 # TODO add some keyword stuff here
 db = 'acmonitor'
 
+
 def nuclear():
     # Drop all tables from a given database
 
@@ -19,10 +20,10 @@ def nuclear():
         cur.execute("SELECT table_schema,table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_schema,table_name")
         rows = cur.fetchall()
         for row in rows:
-            print "dropping table: ", row[1]   
-            cur.execute("drop table " + row[1] + " cascade") 
+            print "dropping table: ", row[1]
+            cur.execute("drop table " + row[1] + " cascade")
         cur.close()
-        conn.close()        
+        conn.close()
     except:
         print "Error: ", sys.exc_info()[1]
 
@@ -38,7 +39,7 @@ def interactive():
 
     # captures user input
     answer = raw_input('Which option: ')
-    
+
     if answer == 'DELETE ALL MY TABLES':
         print(30 * '-')
         print('   Results')
