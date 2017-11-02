@@ -10,9 +10,10 @@ DBSession = sessionmaker(bind = engine)
 
 session = DBSession()
 myFirstCustomer = Customer(name = "Bowditch Navigation")
-CustomersFacility = Facility(address = "2300 Greenhill Dr, Ste 100 Round Rock, Texas 78664 USA", customer = myFirstCustomer)
+customersFacility = Facility(address = "2300 Greenhill Dr, Ste 100 Round Rock, Texas 78664 USA", customer = myFirstCustomer)
 # adds to the staging zone
 session.add(myFirstCustomer)
+session.add(customersFacility)
 session.commit()
 print session.query(Customer).all()
 print session.query(Facility).all()
