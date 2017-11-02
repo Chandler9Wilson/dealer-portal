@@ -1,6 +1,7 @@
 import sys
+import datetime
 from sqlalchemy import Column, ForeignKey, Integer, String, \
-    create_engine
+    Float, Boolean, DateTime, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
