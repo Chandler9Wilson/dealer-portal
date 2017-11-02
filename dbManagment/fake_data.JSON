@@ -1,9 +1,22 @@
 [
   {
-    "customer": "bowditch navigation",
+    "customer": {
+      "name": "bowditch navigation"
+    },
     "facility": {
-      "address": "",
-      "customer": ""
-    }
+      "address": "2300 Greenhill Dr, Ste 100 Round Rock, Texas 78664 USA"
+    },
+    "device": [
+      {
+        "device_type": "FAKENEWS",
+        "location_description": "Harry's Room",
+        "address": "2300 Greenhill Dr, Ste 100 Round Rock, Texas 78664 USA"
+      },
+      {
+        "device_type": "FAKENEWS",
+        "location_description": "Potter's Room",
+        "address": "2300 Greenhill Dr, Ste 100 Round Rock, Texas 78664 USA"
+      }
+    ]
   }
 ]
