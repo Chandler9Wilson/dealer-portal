@@ -6,6 +6,7 @@ db = 'acmonitor'
 
 
 def nuclear():
+    # Taken from https://stackoverflow.com/a/13065584
     # Drop all tables from a given database
 
     try:
