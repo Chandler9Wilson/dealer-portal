@@ -1,7 +1,7 @@
 [
   {
     "customer": {
-      "name": "bowditch navigation"
+      "name": "Bowditch Navigation"
     },
     "facility": [
       {
@@ -11,13 +11,11 @@
     "device": [
       {
         "device_type": "FAKENEWS",
-        "location_description": "Harry's Room",
-        "address": "2300 Greenhill Dr, Ste 100 Round Rock, Texas 78664 USA"
+        "location_description": "Harry's Room"
       },
       {
         "device_type": "FAKENEWS",
-        "location_description": "Potter's Room",
-        "address": "2300 Greenhill Dr, Ste 100 Round Rock, Texas 78664 USA"
+        "location_description": "Potter's Room"
       }
     ]
   },
@@ -39,28 +37,23 @@
     "device": [
       {
         "device_type": "FAKENEWS",
-        "location_description": "Harry's Room",
-        "address": "2150 E Palm Valley Blvd Ste 100, Round Rock, TX 78665"
+        "location_description": "Harry's Room"
       },
       {
         "device_type": "FAKENEWS",
-        "location_description": "Potter's Room",
-        "address": "2150 E Palm Valley Blvd Ste 100, Round Rock, TX 78665"
+        "location_description": "Potter's Room"
       },
       {
         "device_type": "FAKENEWS",
-        "location_description": "Harry's Room",
-        "address": "2150 E Palm Valley Blvd Ste 100, Round Rock, TX 78665"
+        "location_description": "Harry's Room"
       },
       {
         "device_type": "FAKENEWS",
-        "location_description": "Potter's Room",
-        "address": "1468 E Whitestone Blvd #100, Cedar Park, TX 78613"
+        "location_description": "Potter's Room"
       },
       {
         "device_type": "FAKENEWS",
-        "location_description": "Harry's Room",
-        "address": "11521 Rr 620 N. E-1000, Austin, TX 78726"
+        "location_description": "Harry's Room"
       }
     ]
   }
