@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask import session as login_session
 import random
 import string
@@ -12,7 +12,8 @@ def login():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
                     for x in xrange(32))
     login_session['state'] = state
-    return "The current session state is %s" % login_session['state']
+    # render the login template
+    return render_template('login.html')
 
 
 if __name__ == '__main__':

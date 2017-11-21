@@ -1,0 +1,27 @@
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+      <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+      </script>
+      <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+      <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+    </head>
+
+    <body>
+      <div id="signinButton">
+        <span class="g-signin"
+          data-scope="openid email"
+          data-clientid="349469004723-j9csi1hlhb1s0abuap24lo50mgvbkrhh.apps.googleusercontent.com"
+          data-redirecturi="postmessage"
+          data-accesstype="offline"
+          data-cookiepolicy="single_host_origin"
+          data-callback="signInCallback"
+          data-approvalprompt="force">
+      </span>
+      </div>
+    </body>
+  </html>
