@@ -37,6 +37,9 @@
                 var div = document.getElementById('result')
                 var responseMessage = 'Login Successful!</br>' + response + '</br>Redirecting...'
                 div.insertAdjacentHTML('beforeend', responseMessage)
+
+                // TODO find a better way to return this if statement
+                return response
               }
               throw new Error('Network response was not ok.')
             })
