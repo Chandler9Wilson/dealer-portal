@@ -1,50 +1,60 @@
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <!--Let browser know website is optimized for mobile-->
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<!DOCTYPE html>
+<html>
+<head>
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-      <!--Google sign in-->
-      <script src="//apis.google.com/js/platform.js?onload=start"> </script>
-    </head>
+  <!-- sets the client id for google -->
+  <meta name="google-signin-client_id" content="349469004723-j9csi1hlhb1s0abuap24lo50mgvbkrhh.apps.googleusercontent.com">
 
-    <body>
-      <div id="signinButton">
-        <span class="g-signin"
-          data-scope="openid email"
-          data-clientid="349469004723-j9csi1hlhb1s0abuap24lo50mgvbkrhh.apps.googleusercontent.com"
-          data-redirecturi="postmessage"
-          data-accesstype="offline"
-          data-cookiepolicy="single_host_origin"
-          data-callback="signInCallback"
-          data-approvalprompt="force">
-        </span>
-      </div>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+</head>
 
-      <div id="result"></div>
+<body>
+  <div class="g-signin2" 
+    data-onsuccess="onSignIn">
+  </div>
 
-      <script>
-        function signInCallback(authResult) {
-          if (authResult['code']) {
-            // TODO add confirmation of sign in request to prevent additional button clicks
+  <div id="debug">{{debugIt}}</div>
 
-            var myInit = {
-              method: 'POST'
-            }
-            // TODO update url to either be modular or reflect end deployment
-            fetch('/gconnect?state={{STATE}}', myInit).then(function(response) {
-              if(response.ok) {
-                var div = document.getElementById('result')
-                var responseMessage = 'Login Successful!</br>' + response + '</br>Redirecting...'
-                div.insertAdjacentHTML('beforeend', responseMessage)
+  <div id="result"></div>
 
-                // TODO find a better way to return this if statement
-                return response
-              }
-              throw new Error('Network response was not ok.')
-            })
-          }
+  <script>
+    function sendToken(id_token) {
+      var myInit = {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          idtoken: id_token
+        })
+      }
+      fetch('/gconnect?state={{STATE}}', myInit).then(function(response) {
+        if(response.ok) {
+          var div = document.getElementById('result')
+          var responseMessage = 'Login Successful!</br>' + response + '</br>Redirecting...'
+          div.insertAdjacentHTML('beforeend', responseMessage)
+
+          // TODO find a better way to return this if statement
+          return response
         }
-      </script>
-    </body>
-  </html>
+        throw new Error('Network response was not ok.')
+      })
+    }
+
+    function onSignIn(googleUser) {
+      var id_token = googleUser.getAuthResponse().id_token
+      console.log('Token: ' + googleUser.getAuthResponse().id_token)
+      sendToken(id_token)
+
+      var profile = googleUser.getBasicProfile();
+      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+      console.log('Name: ' + profile.getName());
+      console.log('Image URL: ' + profile.getImageUrl());
+      console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+    }
+  </script>
+</body>
+</html>
