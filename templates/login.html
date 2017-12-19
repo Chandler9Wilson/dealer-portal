@@ -19,42 +19,7 @@
 
   <div id="result"></div>
 
-  <script>
-    function sendToken(id_token) {
-      var myInit = {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          idtoken: id_token
-        })
-      }
-      fetch('/gconnect?state={{STATE}}', myInit).then(function(response) {
-        if(response.ok) {
-          var div = document.getElementById('result')
-          var responseMessage = 'Login Successful!</br>' + response + '</br>Redirecting...'
-          div.insertAdjacentHTML('beforeend', responseMessage)
-
-          // TODO find a better way to return this if statement
-          return response
-        }
-        throw new Error('Network response was not ok.')
-      })
-    }
-
-    function onSignIn(googleUser) {
-      var id_token = googleUser.getAuthResponse().id_token
-      console.log('Token: ' + googleUser.getAuthResponse().id_token)
-      sendToken(id_token)
-
-      var profile = googleUser.getBasicProfile();
-      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-      console.log('Name: ' + profile.getName());
-      console.log('Image URL: ' + profile.getImageUrl());
-      console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-    }
-  </script>
+  <!-- http://flask.pocoo.org/docs/0.12/api/#flask.url_for -->
+  <script src="{{url_for('static', filename='js/login.js')}}"></script>
 </body>
 </html>

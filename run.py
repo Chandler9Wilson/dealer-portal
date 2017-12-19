@@ -20,15 +20,9 @@ def setuser(user):
     print '-' * 30
     print session
 
-    session['user'] = user
-
-    ''' testing32 = ''.join(random.choice(string.ascii_uppercase + string.digits)
-                        for x in xrange(32))
-    session['testing32'] = testing32 '''
-
     infoMessage = 'User value set to: ' + \
         session['user']
-    return render_template('guide.html', debugIt=infoMessage)
+    return render_template('login.html', debugIt=infoMessage)
 
 
 @app2.route('/getuser')
@@ -50,8 +44,6 @@ def gconnect():
     print 'gconnect called'
     print '-' * 30
     print request.headers
-    print '-' * 30
-    print tokenJSON['idtoken']
 
     try:
         token = tokenJSON['idtoken']
