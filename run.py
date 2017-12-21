@@ -1,8 +1,9 @@
 import random
 import string
 import json
+import os
 
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, url_for
 
 # used for google oauth verification of tokens
 from google.oauth2 import id_token
@@ -10,34 +11,38 @@ from google.auth.transport import requests as googleRequests
 
 # makes sure this is different from the main files flask name or cookies
 # etc will be shared
-app2 = Flask(__name__)
+app = Flask(__name__)
 
 
-@app2.route('/setuser/<user>')
-def setuser(user):
+@app.route('/login')
+def login():
     print '-' * 30
     print request.headers
     print '-' * 30
     print session
 
-    infoMessage = 'User value set to: ' + \
-        session['user']
-    return render_template('login.html', debugIt=infoMessage)
+    return render_template('login.html')
 
 
-@app2.route('/getuser')
-def getuser():
+@app.route('/home')
+def home():
+
+    return render_template('directory.html')
+
+
+@app.route('/debug')
+def debug():
+    # TODO remove for production
     print session
 
-    infoMessage = 'User value set to: ' + \
-        session['user']
     return infoMessage
 
 
-@app2.route('/gconnect', methods=['POST'])
+@app.route('/gconnect', methods=['POST'])
 def gconnect():
 
-    CLIENT_ID = '349469004723-j9csi1hlhb1s0abuap24lo50mgvbkrhh.apps.googleusercontent.com'
+    CLIENT_ID = '349469004723-j9csi1hlhb1s0abuap24lo50mgvbkrhh' + \
+        '.apps.googleusercontent.com'
     tokenJSON = json.loads(request.data)
 
     print '-' * 30
@@ -66,13 +71,34 @@ def gconnect():
         # TODO change to feed an error back to the user
 
         # Invalid token
-        pass
+        return render_template('login.html')
 
-    return 'hello world'
+    return render_template('directory.html')
+
+
+@app.context_processor
+# TODO remove before deployment
+def override_url_for():
+    # overides static file caching
+    """
+    Generate a new token on every request to prevent the browser from
+    caching static files.
+    """
+    return dict(url_for=dated_url_for)
+
+
+def dated_url_for(endpoint, **values):
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+        if filename:
+            file_path = os.path.join(app.root_path,
+                                     endpoint, filename)
+            values['q'] = int(os.stat(file_path).st_mtime)
+    return url_for(endpoint, **values)
 
 
 if __name__ == '__main__':
     # TODO change secret_key
-    app2.secret_key = 'super secret key'
-    app2.debug = True
-    app2.run(host='0.0.0.0', port=8000)
+    app.secret_key = 'super secret key'
+    app.debug = True
+    app.run(host='0.0.0.0', port=8000)

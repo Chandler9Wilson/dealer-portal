@@ -1,3 +1,7 @@
+if (auth2.currentUser.get()) {
+  console.log('shit your already signed in')
+}
+
 function sendToken (idToken) {
   var myInit = {
     headers: {
@@ -15,7 +19,6 @@ function sendToken (idToken) {
         var div = document.getElementById('result')
         var responseMessage = 'Login Successful!</br>' + response + '</br>Redirecting...'
         div.insertAdjacentHTML('beforeend', responseMessage)
-
         // TODO find a better way to return this if statement
         return response
       }
@@ -26,4 +29,5 @@ function sendToken (idToken) {
 function onSignIn (googleUser) {
   var idToken = googleUser.getAuthResponse().id_token
   sendToken(idToken)
+  window.location.href = '/home'
 }
