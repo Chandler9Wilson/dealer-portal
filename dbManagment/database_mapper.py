@@ -16,6 +16,7 @@ from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
+
 class Customer(Base):
 
     __tablename__ = 'customer'
