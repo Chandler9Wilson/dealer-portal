@@ -12,7 +12,8 @@
 
 <body>
   <div class="g-signin2" 
-    data-onsuccess="onSignIn">
+    data-onsuccess="onSignIn"
+    cookie-policy="single_host_origin" >
   </div>
 
   <div id="debug">{{debugIt}}</div>
@@ -20,6 +21,9 @@
   <div id="result"></div>
 
   <!-- http://flask.pocoo.org/docs/0.12/api/#flask.url_for -->
+  <script>
+    var logoutFirst = '{{ logoutFirst }}'
+  </script>
   <script src="{{url_for('static', filename='js/login.js')}}"></script>
 </body>
 </html>

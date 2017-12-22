@@ -1,7 +1,3 @@
-if (auth2.currentUser.get()) {
-  console.log('shit your already signed in')
-}
-
 function sendToken (idToken) {
   var myInit = {
     headers: {
@@ -26,8 +22,15 @@ function sendToken (idToken) {
     })
 }
 
+// callback for google sign-in state change
 function onSignIn (googleUser) {
-  var idToken = googleUser.getAuthResponse().id_token
-  sendToken(idToken)
-  window.location.href = '/home'
+  if (logoutFirst) {
+    gapi.auth2.getAuthInstance().signOut()
+    // prevents a signOut loop
+    logoutFirst = undefined
+  } else {
+    var idToken = googleUser.getAuthResponse().id_token
+    sendToken(idToken)
+    window.location.href = '/home'
+  }
 }

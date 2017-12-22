@@ -14,14 +14,18 @@ from google.auth.transport import requests as googleRequests
 app = Flask(__name__)
 
 
-@app.route('/login')
-def login():
+@app.route('/login/<logoutFirst>')
+@app.route('/login/', defaults={'logoutFirst': None})
+def login(logoutFirst):
     print '-' * 30
     print request.headers
     print '-' * 30
     print session
 
-    return render_template('login.html')
+    if logoutFirst is None:
+        return render_template('login.html')
+    else:
+        return render_template('login.html', logoutFirst=logoutFirst)
 
 
 @app.route('/home')
@@ -74,6 +78,9 @@ def gconnect():
         return render_template('login.html')
 
     return render_template('directory.html')
+
+
+print app.url_map
 
 
 @app.context_processor
