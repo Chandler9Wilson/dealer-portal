@@ -64,5 +64,5 @@ def add_to_session(data):
 
 # good explenation of with http://effbot.org/zone/python-with-statement.htm
 with open('fake_data.JSON') as fake_data:
-    data = json.load(fake_data)
+    data = json.load(fake_customer_data)
     add_to_session(data)
