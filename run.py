@@ -9,8 +9,8 @@ from flask import Flask, session, render_template, request, url_for
 from google.oauth2 import id_token
 from google.auth.transport import requests as googleRequests
 
-# makes sure this is different from the main files flask name or cookies
-# etc will be shared
+# makes sure this is different from other files flask name or
+# some storage is shared
 app = Flask(__name__)
 
 
