@@ -9,9 +9,21 @@ from flask import Flask, session, render_template, request, url_for
 from google.oauth2 import id_token
 from google.auth.transport import requests as googleRequests
 
+# flask-login used for login management and persistence
+from flask_login import LoginManager
+
 # makes sure this is different from other files flask name or
 # some storage is shared
 app = Flask(__name__)
+
+# Flask-Login class
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(email):
+    return User.query.filter_by(email=email).first()
 
 
 @app.route('/login/<logoutFirst>')
