@@ -5,16 +5,26 @@ import os
 
 from flask import Flask, session, render_template, request, url_for
 
+# flask-login used for login management and persistence
+from flask_login import LoginManager
+
+# Import database classes and SQLAlchamy instance
+from dbManagment.models import Customer, Facility, Device, \
+    Data, User, UserToFacility, Role, db
+
 # used for google oauth verification of tokens
 from google.oauth2 import id_token
 from google.auth.transport import requests as googleRequests
 
-# flask-login used for login management and persistence
-from flask_login import LoginManager
-
 # makes sure this is different from other files flask name or
 # some storage is shared
 app = Flask(__name__)
+# TODO make config options more succinct
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://catalog:catalog@' + \
+    'localhost:5432/acmonitor'
+
+db.init_app(app)
 
 # Flask-Login class
 login_manager = LoginManager()
@@ -29,10 +39,6 @@ def load_user(email):
 @app.route('/login/<logoutFirst>')
 @app.route('/login/', defaults={'logoutFirst': None})
 def login(logoutFirst):
-    print '-' * 30
-    print request.headers
-    print '-' * 30
-    print session
 
     if logoutFirst is None:
         return render_template('login.html')
@@ -48,27 +54,23 @@ def home():
 
 @app.route('/debug')
 def debug():
-    # TODO remove for production
-    print session
 
     return infoMessage
 
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
+    # Handles google login requests
 
     CLIENT_ID = '349469004723-j9csi1hlhb1s0abuap24lo50mgvbkrhh' + \
         '.apps.googleusercontent.com'
     tokenJSON = json.loads(request.data)
 
-    print '-' * 30
-    print 'gconnect called'
-    print '-' * 30
-    print request.headers
-
     try:
         token = tokenJSON['idtoken']
 
+        # Google library verifies the JWT signature (signed JSON Web Token)
+        # and the audience and expiration claim
         idinfo = id_token.verify_oauth2_token(
             token, googleRequests.Request(), CLIENT_ID)
 
@@ -77,8 +79,23 @@ def gconnect():
         # if idinfo['aud'] not in [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]:
         #     raise ValueError('Could not verify audience.')
 
+        # Checks if issuer of the token is google
         if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
             raise ValueError('Wrong issuer.')
+        else:
+            # Check if user is in the DB
+            email = idinfo['email']
+            print email
+            user = User.query.filter_by(email=email).first()
+            print user
+
+            if user:
+                login_user(user)
+                return "User logged in"
+            else:
+                print 'user not found in db'
+                User(email)
+                return "User has been added"
 
         # ID token is valid. Get the user's Google Account ID from the decoded
         # token.
@@ -90,9 +107,6 @@ def gconnect():
         return render_template('login.html')
 
     return render_template('directory.html')
-
-
-print app.url_map
 
 
 @app.context_processor
