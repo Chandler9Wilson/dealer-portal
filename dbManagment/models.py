@@ -70,10 +70,6 @@ class User(db.Model):
     # for multiple login options for the same user
     oauth_provider = db.Column(db.String, nullable=False)
 
-    def __init__(self, email):
-        self.id = id
-        self.email = email
-
     def is_authenticated(self):
         return True
 

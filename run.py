@@ -6,7 +6,7 @@ import os
 from flask import Flask, session, render_template, request, url_for
 
 # flask-login used for login management and persistence
-from flask_login import LoginManager
+from flask_login import LoginManager, login_user
 
 # Import database classes and SQLAlchamy instance
 from dbManagment.models import Customer, Facility, Device, \
@@ -20,7 +20,7 @@ from google.auth.transport import requests as googleRequests
 # some storage is shared
 app = Flask(__name__)
 # TODO make config options more succinct
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://catalog:catalog@' + \
     'localhost:5432/acmonitor'
 
@@ -84,17 +84,17 @@ def gconnect():
             raise ValueError('Wrong issuer.')
         else:
             # Check if user is in the DB
-            email = idinfo['email']
-            print email
-            user = User.query.filter_by(email=email).first()
-            print user
+            user_email = idinfo['email']
+            user = User.query.filter_by(email=user_email).first()
 
             if user:
                 login_user(user)
                 return "User logged in"
             else:
                 print 'user not found in db'
-                User(email)
+                new_user = User(email=user_email, oauth_provider='Google', )
+                db.session.add(new_user)
+                db.session.commit()
                 return "User has been added"
 
         # ID token is valid. Get the user's Google Account ID from the decoded
