@@ -2,11 +2,13 @@ import random
 import string
 import json
 import os
+import time
 
-from flask import Flask, session, render_template, request, url_for
+from flask import Flask, session, render_template, request, url_for, flash, \
+    redirect, Response, make_response
 
 # flask-login used for login management and persistence
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, login_required
 
 # Import database classes and SQLAlchamy instance
 from dbManagment.models import Customer, Facility, Device, \
@@ -28,12 +30,31 @@ db.init_app(app)
 
 # Flask-Login class
 login_manager = LoginManager()
+# login_manager.login_view = 'login'
 login_manager.init_app(app)
 
 
 @login_manager.user_loader
 def load_user(email):
-    return User.query.filter_by(email=email).first()
+    u = User.query.filter_by(email=email).first()
+    print u.email
+    return User(u.email, u.id)
+
+
+'''
+@login_manager.unauthorized_handler
+def handler_needs_login():
+    flash("You have to be logged in to access this page.")
+    return redirect(url_for('account.login', next=request.endpoint))
+
+
+def redirect_dest(fallback):
+    dest = request.args.get('next')
+    try:
+        dest_url = url_for(dest)
+    except:
+        return redirect(fallback)
+    return redirect(dest_url) '''
 
 
 @app.route('/login/<logoutFirst>')
@@ -43,12 +64,13 @@ def login(logoutFirst):
     if logoutFirst is None:
         return render_template('login.html')
     else:
+        # flask_login.logout_user()
         return render_template('login.html', logoutFirst=logoutFirst)
 
 
-@app.route('/home')
+@app.route('/home/')
+@login_required
 def home():
-
     return render_template('directory.html')
 
 
@@ -58,10 +80,9 @@ def debug():
     return infoMessage
 
 
-@app.route('/gconnect', methods=['POST'])
+@app.route('/gconnect/', methods=['POST'])
 def gconnect():
     # Handles google login requests
-
     CLIENT_ID = '349469004723-j9csi1hlhb1s0abuap24lo50mgvbkrhh' + \
         '.apps.googleusercontent.com'
     tokenJSON = json.loads(request.data)
@@ -89,7 +110,8 @@ def gconnect():
 
             if user:
                 login_user(user)
-                return "User logged in"
+
+                return 'Hello World'
             else:
                 print 'user not found in db'
                 new_user = User(email=user_email, oauth_provider='Google', )
@@ -134,4 +156,4 @@ if __name__ == '__main__':
     # TODO change secret_key
     app.secret_key = 'super secret key'
     app.debug = True
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=8000, threaded=True)

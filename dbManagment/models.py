@@ -31,6 +31,7 @@ class Device(db.Model):
     __tablename__ = 'device'
 
     id = db.Column(db.Integer, primary_key=True)
+    hardware_id = db.Column(db.String, nullable=False)
     device_type = db.Column(db.String, nullable=False)
     location_description = db.Column(db.String)
     facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'))
@@ -69,6 +70,11 @@ class User(db.Model):
     # TODO this needs to be a seperate table
     # for multiple login options for the same user
     oauth_provider = db.Column(db.String, nullable=False)
+
+    def __init__(self, email, id, active=True):
+        self.email = email
+        self.id = id
+        self.is_active = active
 
     def is_authenticated(self):
         return True

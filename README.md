@@ -1,4 +1,5 @@
 # TODO
+
 * Implement flask login && flask sqlalchemy
 * Implement flask principle
 * switch to a virtualenv

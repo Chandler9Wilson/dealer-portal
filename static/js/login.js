@@ -1,3 +1,7 @@
+function redirect () {
+  document.location.href = '/home/'
+}
+
 function sendToken (idToken) {
   var myInit = {
     headers: {
@@ -9,17 +13,14 @@ function sendToken (idToken) {
       idtoken: idToken
     })
   }
-  window.fetch('/gconnect?state={{STATE}}', myInit).then(
-    function (response) {
-      if (response.ok) {
-        var div = document.getElementById('result')
-        var responseMessage = 'Login Successful!</br>' + response + '</br>Redirecting...'
-        div.insertAdjacentHTML('beforeend', responseMessage)
-        // TODO find a better way to return this if statement
-        return response
-      }
-      throw new Error('Network response was not ok.')
-    })
+  window.fetch('/gconnect/', myInit).then(function (response) {
+    if (response.ok) {
+      setTimeout(redirect, 200)
+      // TODO find a better way to return this if statement
+      return response
+    }
+    throw new Error('Network response was not ok.')
+  })
 }
 
 // callback for google sign-in state change
@@ -31,6 +32,5 @@ function onSignIn (googleUser) {
   } else {
     var idToken = googleUser.getAuthResponse().id_token
     sendToken(idToken)
-    window.location.href = '/home'
   }
 }
