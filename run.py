@@ -37,7 +37,7 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(email):
     u = User.query.filter_by(email=email).first()
-    print u.email
+    print(u.email)
     return User(u.email, u.id)
 
 
@@ -113,7 +113,7 @@ def gconnect():
 
                 return 'Hello World'
             else:
-                print 'user not found in db'
+                print('user not found in db')
                 new_user = User(email=user_email, oauth_provider='Google', )
                 db.session.add(new_user)
                 db.session.commit()
@@ -156,4 +156,4 @@ if __name__ == '__main__':
     # TODO change secret_key
     app.secret_key = 'super secret key'
     app.debug = True
-    app.run(host='0.0.0.0', port=8000, threaded=True)
+    app.run(host='0.0.0.0', port=8500, threaded=True)
