@@ -12,7 +12,7 @@
     <ul>
       <li><a href="/home">home</a></li>
       <li><a href="/debug">debug</a></li>
-      <li class="logout"><a href="/login/True" onclick="logout()">logout</a></li>
+      <li class="logout"><a href="/login?logout=true" onclick="logout()">logout</a></li>
     </ul>
   </div>
 
@@ -20,6 +20,6 @@
   <div id="result"></div>
 
   <!-- http://flask.pocoo.org/docs/0.12/api/#flask.url_for -->
-  <script src="{{url_for('static', filename='js/directory.js')}}"></script>
+  <script src="{{url_for('static', filename='dist/dealer_portal.bundle.js')}}"></script>
 </body>
 </html>

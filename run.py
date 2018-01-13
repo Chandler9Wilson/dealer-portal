@@ -21,10 +21,12 @@ from google.auth.transport import requests as googleRequests
 # makes sure this is different from other files flask name or
 # some storage is shared
 app = Flask(__name__)
+
 # TODO make config options more succinct
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://catalog:catalog@' + \
-    'localhost:5432/acmonitor'
+    'localhost:15432/acmonitor'
+app.config['SQLALCHEMY_ECHO'] = True
 
 db.init_app(app)
 
@@ -57,19 +59,14 @@ def redirect_dest(fallback):
     return redirect(dest_url) '''
 
 
-@app.route('/login/<logoutFirst>')
-@app.route('/login/', defaults={'logoutFirst': None})
+@app.route('/login/')
 def login(logoutFirst):
-
-    if logoutFirst is None:
-        return render_template('login.html')
-    else:
-        # flask_login.logout_user()
-        return render_template('login.html', logoutFirst=logoutFirst)
+    # flask_login.logout_user()
+    return render_template('login.html')
 
 
 @app.route('/home/')
-@login_required
+# @login_required
 def home():
     return render_template('directory.html')
 
@@ -85,9 +82,12 @@ def gconnect():
     # Handles google login requests
     CLIENT_ID = '349469004723-j9csi1hlhb1s0abuap24lo50mgvbkrhh' + \
         '.apps.googleusercontent.com'
-    tokenJSON = json.loads(request.data)
+    tokenJSON = json.loads(request.data.decode('utf-8'))
 
     try:
+        import pdb
+        pdb.set_trace()
+
         token = tokenJSON['idtoken']
 
         # Google library verifies the JWT signature (signed JSON Web Token)
@@ -156,4 +156,4 @@ if __name__ == '__main__':
     # TODO change secret_key
     app.secret_key = 'super secret key'
     app.debug = True
-    app.run(host='0.0.0.0', port=8500, threaded=True)
+    app.run(host='0.0.0.0', port=8000, threaded=True)
