@@ -73,7 +73,6 @@ class User(db.Model):
 
     def __init__(self, email, id, active=True):
         self.email = email
-        self.id = id
         self.is_active = active
 
     def is_authenticated(self):

@@ -11,7 +11,7 @@ from flask import Flask, session, render_template, request, url_for, flash, \
 from flask_login import LoginManager, login_user, login_required
 
 # Import database classes and SQLAlchamy instance
-from dbManagment.models import Customer, Facility, Device, \
+from db.models import Customer, Facility, Device, \
     Data, User, UserToFacility, Role, db
 
 # used for google oauth verification of tokens
@@ -25,7 +25,7 @@ app = Flask(__name__)
 # TODO make config options more succinct
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://catalog:catalog@' + \
-    'localhost:15432/acmonitor'
+    'localhost:5432/acmonitor'
 app.config['SQLALCHEMY_ECHO'] = True
 
 db.init_app(app)
@@ -60,7 +60,7 @@ def redirect_dest(fallback):
 
 
 @app.route('/login/')
-def login(logoutFirst):
+def login():
     # flask_login.logout_user()
     return render_template('login.html')
 
@@ -114,7 +114,7 @@ def gconnect():
                 return 'Hello World'
             else:
                 print('user not found in db')
-                new_user = User(email=user_email, oauth_provider='Google', )
+                new_user = User(email=user_email)
                 db.session.add(new_user)
                 db.session.commit()
                 return "User has been added"
