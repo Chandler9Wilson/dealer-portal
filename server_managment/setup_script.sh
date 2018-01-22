@@ -3,8 +3,10 @@
 # based on https://gist.github.com/SteveWooding/a62d04af359c39a08f5fd545cfc3e67d
 
 # Update the Ubuntu package database
+echo " Updating packages.... "
 sudo apt-get -qqy update
 
+echo " Attempting install of postgresql.... "
 sudo apt-get -qqy install make zip unzip postgresql
 
 # Make sure that PostgreSQL is running
@@ -24,4 +26,5 @@ sudo -u postgres createuser -dRSP catalog
 # Create the news database and have it owned by the vagrant PostgreSQL user
 sudo -u postgres createdb -O catalog acmonitor
 
-python ./db/setup_models.py
+source env/bin/activate
+python -m db.setup
