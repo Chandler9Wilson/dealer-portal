@@ -4,11 +4,13 @@ function redirect () {
 
 function sendToken (idToken) {
   var myInit = {
+    method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    method: 'POST',
+    // https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials
+    credentials: 'same-origin',
     body: JSON.stringify({
       idtoken: idToken
     })

@@ -8,7 +8,7 @@ from flask import Flask, session, render_template, request, url_for, flash, \
     redirect, Response, make_response
 
 # flask-login used for login management and persistence
-from flask_login import LoginManager, login_user, login_required
+from flask_login import LoginManager, login_user, login_required, current_user
 
 # Import database classes and SQLAlchamy instance
 from db.models import Customer, Facility, Device, \
@@ -37,10 +37,10 @@ login_manager.init_app(app)
 
 
 @login_manager.user_loader
-def load_user(email):
-    u = User.query.filter_by(email=email).first()
-    print(u.email)
-    return User(u.email, u.id)
+def load_user(id):
+    u = User.query.filter_by(id=id).first()
+    # TODO investigate if im just creating duplicates here?
+    return User(u.email, u.oauth_provider)
 
 
 '''
@@ -66,7 +66,7 @@ def login():
 
 
 @app.route('/home/')
-# @login_required
+@login_required
 def home():
     return render_template('directory.html')
 
@@ -85,9 +85,6 @@ def gconnect():
     tokenJSON = json.loads(request.data.decode('utf-8'))
 
     try:
-        import pdb
-        pdb.set_trace()
-
         token = tokenJSON['idtoken']
 
         # Google library verifies the JWT signature (signed JSON Web Token)
@@ -109,19 +106,21 @@ def gconnect():
             user = User.query.filter_by(email=user_email).first()
 
             if user:
-                login_user(user)
+                login_user(user, True)
 
+                # TODO return something usefull
                 return 'Hello World'
             else:
-                print('user not found in db')
-                new_user = User(email=user_email)
+                # TODO improve adding a new user info attached to idinfo obj
+                new_user = User(email=user_email, oauth_provider='google')
                 db.session.add(new_user)
-                db.session.commit()
-                return "User has been added"
-
-        # ID token is valid. Get the user's Google Account ID from the decoded
-        # token.
-        userid = idinfo['sub']
+                try:
+                    db.session.commit()
+                except Exception as e:
+                    db.session.rollback()
+                    print(str(e))
+                    return "An error occured"
+                return redirect(url_for('home'))
     except ValueError:
         # TODO change to feed an error back to the user
 

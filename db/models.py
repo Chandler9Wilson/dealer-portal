@@ -71,7 +71,8 @@ class User(db.Model):
     # for multiple login options for the same user
     oauth_provider = db.Column(db.String, nullable=False)
 
-    def __init__(self, email, id, active=True):
+    def __init__(self, email, oauth_provider, active=True):
+        self.oauth_provider = oauth_provider
         self.email = email
         self.is_active = active
 

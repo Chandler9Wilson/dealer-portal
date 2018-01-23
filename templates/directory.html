@@ -16,6 +16,11 @@
     </ul>
   </div>
 
+
+  {% if current_user.is_authenticated %}
+    <h1>Hi {{ current_user.email }}!</h1>
+  {% endif %}
+
   <div id="debug">{{debugIt}}</div>
   <div id="result"></div>
 
