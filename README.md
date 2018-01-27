@@ -1,8 +1,13 @@
 # Dealer Portal
 
+## This readme is for the Back-end e.g. Flask and DB management for Front-end work see the readme in ./static
+
 ## TODO
 
-* Implement flask principle
+* Implement Vuejs and bulma on the frontend
+* Frontend Menu layout
+* Display fake data
+* Implement flask principle for finer grained user permissions
 * update variable names to follow [this](http://flask.pocoo.org/docs/0.12/styleguide/#naming-conventions)
 * remove debug prints
 * write documentation on db scripts

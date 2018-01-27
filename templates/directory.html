@@ -8,21 +8,9 @@
 </head>
 
 <body>
-  <div id="navbar">
-    <ul>
-      <li><a href="/home">home</a></li>
-      <li><a href="/debug">debug</a></li>
-      <li class="logout"><a href="/login?logout=true" onclick="logout()">logout</a></li>
-    </ul>
+  <div id="app">
+
   </div>
-
-
-  {% if current_user.is_authenticated %}
-    <h1>Hi {{ current_user.email }}!</h1>
-  {% endif %}
-
-  <div id="debug">{{debugIt}}</div>
-  <div id="result"></div>
 
   <!-- http://flask.pocoo.org/docs/0.12/api/#flask.url_for -->
   <script src="{{url_for('static', filename='dist/dealer_portal.bundle.js')}}"></script>
