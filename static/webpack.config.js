@@ -1,7 +1,7 @@
 const path = require('path')
 
 const config = {
-  entry: './js/directory.js',
+  entry: './src/js/directory.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'dealer_portal.bundle.js'
