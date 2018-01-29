@@ -1,11 +1,23 @@
 <template>
-  <div id="navbar">
-    <ul>
-      <li><a href="/home">home</a></li>
-      <li><a href="/debug">{{ msg }}</a></li>
-      <li class="logout"><a href="/login?logout=true" onclick="logout()">logout</a></li>
-    </ul>
-  </div>
+  <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/home">
+        <img src="http://via.placeholder.com/112x28" alt="I should probably update" width="112" height="28">
+      </a>
+    </div>
+
+    <div class="navbar-menu">
+        <!-- Left side of the navbar after the brand image -->
+        <div class="navbar-start">
+          <a class="navbar-item" href="/home">Home</a>
+        </div>
+
+        <!-- Right side of the navbar -->
+        <div class="navbar-end">
+          <a class="navbar-item" href="/login?logout=true" onclick="logout()">Logout</a>
+        </div>
+      </div>
+  </nav>
 </template>
 
 <script>
@@ -18,30 +30,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-#navbar ul {
-  margin: 0;
-  padding: 5px;
-  list-style-type: none;
-  text-align: center;
-  background-color: #000;
-}
-
-#navbar ul li {
-  display: inline;
-}
-
-#navbar ul li a {
-  text-decoration: none;
-  padding: 0.2em 1em;
-  color: #fff;
-  background-color: #000;
-}
-
-#navbar ul li a:hover {
-  color: #000;
-  background-color: #fff;
-}
-</style>
-

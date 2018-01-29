@@ -4,7 +4,6 @@
 
 ## TODO
 
-* Implement bulma on the frontend
 * Frontend Menu layout
 * Display fake data
 * Implement flask principle for finer grained user permissions
