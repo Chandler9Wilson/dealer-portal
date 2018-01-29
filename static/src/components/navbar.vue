@@ -2,7 +2,7 @@
   <div id="navbar">
     <ul>
       <li><a href="/home">home</a></li>
-      <li><a href="/debug">[[ msg ]]</a></li>
+      <li><a href="/debug">{{ msg }}</a></li>
       <li class="logout"><a href="/login?logout=true" onclick="logout()">logout</a></li>
     </ul>
   </div>
