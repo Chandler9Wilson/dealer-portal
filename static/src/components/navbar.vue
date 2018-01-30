@@ -10,6 +10,18 @@
         <!-- Left side of the navbar after the brand image -->
         <div class="navbar-start">
           <a class="navbar-item" href="/home">Home</a>
+
+          <div class="navbar-item has-dropdown" v-bind:class="{'is-active': isActive}" @click="isActive = !isActive">
+            <a class="navbar-link">
+              Find
+            </a>
+
+            <div class="navbar-dropdown">
+              <a class="navbar-item">Facility</a>
+              <a class="navbar-item">Customer</a>
+              <a class="navbar-item">Device</a>
+            </div>
+          </div>
         </div>
 
         <!-- Right side of the navbar -->
@@ -25,7 +37,8 @@ export default {
   name: 'navbar',
   data() {
     return {
-      msg: "Hello World"
+      msg: "Hello World",
+      isActive: false
     }
   }
 }
