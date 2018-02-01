@@ -15,6 +15,10 @@ class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
 
+    def __repr__(self):
+        return "<User(id='%s', name='%s')>" % (
+            self.id, self.name)
+
 
 class Facility(db.Model):
 
@@ -24,6 +28,10 @@ class Facility(db.Model):
     address = db.Column(db.String, nullable=False)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
     customer = db.relationship(Customer)
+
+    def __repr__(self):
+        return "<User(id='%s', address='%s', customer_id='%s')>" % (
+            self.id, self.address, self.customer_id)
 
 
 class Device(db.Model):
@@ -36,6 +44,12 @@ class Device(db.Model):
     location_description = db.Column(db.String)
     facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'))
     facility = db.relationship(Facility)
+
+    def __repr__(self):
+        return "<User(id='%s', hardware_id='%s', device_type='%s'," + \
+            "location_description='%s', facility_id='%s')>" % (
+                self.id, self.hardware_id, self.device_type,
+                self.location_description, self.facility_id)
 
 
 class Data(db.Model):
@@ -53,6 +67,12 @@ class Data(db.Model):
     fan_on = db.Column(db.Boolean, nullable=False)
     device_id = db.Column(db.Integer, db.ForeignKey('device.id'))
     device = db.relationship(Device)
+
+    def __repr__(self):
+        return "<User(id='%s', timestamp='%s', t1='%s', t2='%s', t3='%s', " + \
+            "power='%s', operation='%s', fan_on='%s', device_id='%s')>" % (
+                self.id, self.timestamp, self.t1, self.t2, self.t3, self.power,
+                self.operation, self.fan_on, self.device_id)
 
 
 # Start user related tables
@@ -75,6 +95,12 @@ class User(db.Model):
         self.oauth_provider = oauth_provider
         self.email = email
         self.is_active = active
+
+    def __repr__(self):
+        return "<User(id='%s', name='%s', email='%s', profile_pic='%s', " + \
+            "oauth_provider='%s')>" % (
+                self.id, self.name, self.email, self.profile_pic,
+                self.oauth_provider)
 
     def is_authenticated(self):
         return True
@@ -101,14 +127,20 @@ class UserToFacility(db.Model):
     facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'))
     facility = db.relationship(Facility)
 
+    def __repr__(self):
+        return "<User(id='%s', user_id='%s', facility_id='%s')>" % (
+            self.id, self.user_id, self.facility_id)
+
 
 class Role(db.Model):
-    # This design might need a revision currently
-    # a join will be needed everytime a role is pulled
-
+    # A users Role e.g. contracter, admin
     __tablename__ = 'role'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(20), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship(User)
+
+    def __repr__(self):
+        return "<User(id='%s', title='%s', user_id='%s')>" % (
+            self.id, self.title, self.user_id)
