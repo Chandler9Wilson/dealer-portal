@@ -26,5 +26,7 @@ sudo -u postgres createuser -dRSP catalog
 # Create the news database and have it owned by the vagrant PostgreSQL user
 sudo -u postgres createdb -O catalog acmonitor
 
+# TODO setup virtual environment if env folder does not exist
+# Run python virtual environment
 source env/bin/activate
 python -m db.setup

@@ -1,12 +1,13 @@
+#!/usr/bin/env python
 import json
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_mapper import Base, Customer, Facility, Device, Data
+from models import db, Customer, Facility, Device, Data
 
 
 engine = create_engine('postgresql://catalog:catalog@localhost:5432/acmonitor')
 # Class definitions connect to tables in db
-Base.metadata.bind = engine
+db.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
@@ -63,6 +64,6 @@ def add_to_session(data):
 
 
 # good explenation of with http://effbot.org/zone/python-with-statement.htm
-with open('fake_data.JSON') as fake_data:
-    data = json.load(fake_customer_data)
+with open('fake_customer_data.JSON') as fake_data:
+    data = json.load(fake_data)
     add_to_session(data)

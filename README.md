@@ -9,7 +9,9 @@
 * Implement flask principle for finer grained user permissions
 * update variable names to follow [this](http://flask.pocoo.org/docs/0.12/styleguide/#naming-conventions)
 * remove debug prints
+* remove all references to `catalog` changed name to `dealer_portal`
 * write documentation on db scripts
+* Make `import_fake_data.py` more robust e.g. able to add a device without customer or facility
 
 ## Development
 
@@ -24,3 +26,7 @@
 * with pdb
   * insert `import pdb`
   * && `pdb.set_trace()`
+
+## Resources
+
+* python subprocess [explanation](http://www.codecalamity.com/run-subprocess-run/)
