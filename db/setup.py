@@ -1,5 +1,6 @@
-# this assumes that setup_script.sh has been run
-# also for SELECT privileges https://serverfault.com/a/284278t
+# This script needs to be run in the venv from ./ as python -m db.setup
+# Documentation on why above is needed \
+# https://stackoverflow.com/a/28154841/6879253
 
 from db.models import db
 from run import app

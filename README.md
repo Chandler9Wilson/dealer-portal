@@ -2,6 +2,12 @@
 
 ## This readme is for the Back-end e.g. Flask and DB management for Front-end work see the readme in ./static
 
+---
+
+## Getting started
+
+1. Run `./server_managment/setup_script.py` respond `y` when prompted if this is your first time.
+
 ## TODO
 
 * Update fake_customer_data devices to have all required fields currently missing hardware_id
@@ -27,6 +33,13 @@
 * with pdb
   * insert `import pdb`
   * && `pdb.set_trace()`
+
+## TO READ
+
+* [things which arent magic flask](https://ains.co/blog/things-which-arent-magic-flask-part-1.html)
+* [decorators documentation](https://docs.python.org/3/reference/compound_stmts.html#function-definitions)
+* [how does the property decorator work?](https://stackoverflow.com/questions/17330160/how-does-the-property-decorator-work)
+* [how to make a chain of function decorators?](https://stackoverflow.com/a/1594484/6879253)
 
 ## Resources
 

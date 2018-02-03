@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # A setup script for servers or development machines running dealer_portal
 # should be run as your dev user, based on
 # https://gist.github.com/SteveWooding/a62d04af359c39a08f5fd545cfc3e67d
@@ -18,7 +18,7 @@ def install_postgresql():
 
     print('Attempting install of postgresql.... ')
     subprocess.run(
-        'sudo apt - get - qqy install make zip unzip postgresql',
+        'sudo apt-get -qqy install make zip unzip postgresql',
         stderr=subprocess.PIPE, check=True, shell=True)
 
 
@@ -29,11 +29,10 @@ def start_postresql():
 
 
 def create_dbs():
-    # Create a PostgreSQL user for the current Linux user
-    subprocess.run('sudo - u postgres createuser - dRS $USER',
+    # Create a PostgreSQL user for the current Linux user and
+    # create a db in their name
+    subprocess.run('sudo - u postgres createuser - dRS $USER && createdb',
                    stderr=subprocess.PIPE, shell=True)
-    # Creates a db named the same as $USER
-    subprocess.run('createdb', stderr=subprocess.PIPE, check=True, shell=True)
 
     # Create the catalog PostgreSQL user
     print('-' * 30)
@@ -53,6 +52,10 @@ def setup_venv(script_path):
     # Changes the scripts working directory so relative paths work
     os.chdir(script_path)
 
+    print('Installing venv package')
+    subprocess.run('sudo apt-get python3-venv',
+                   stderr=subprocess.PIPE, check=True, shell=True)
+
     print('Creating virtual environment')
     subprocess.run('python3 -m venv ../env',
                    stderr=subprocess.PIPE, check=True, shell=True)
@@ -66,7 +69,8 @@ def setup_models(script_path):
     # script_path should be the path to catalog/server_managment/
     # TODO add code so that setup.py and
     # based on user input import_fake_data.py are run automattically
-    print('Please run ./db/setup.py to setup db models && if you ' +
+    print('Please run ./setup.py in the venv from ./ ' +
+          'with `$ python -m db.setup` to setup db.models && if you' +
           'need fake data run ./db/import_fake_data.py')
 
     # Changes the scripts working directory so relative paths work
@@ -83,8 +87,6 @@ def interactive():
     print('Is this a first time setup of the project? (Y/n)')
     print('-' * 30)
     answer = input()
-
-    print(answer)
 
     if answer in ('Y', 'y'):
         install_postgresql()

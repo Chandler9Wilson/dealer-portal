@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import json
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -60,7 +60,7 @@ def add_to_session(data):
             else:
                 return 'Error: please add a customer name'
         else:
-                return 'Error: please add a customer'
+            return 'Error: please add a customer'
 
 
 # good explenation of with http://effbot.org/zone/python-with-statement.htm
