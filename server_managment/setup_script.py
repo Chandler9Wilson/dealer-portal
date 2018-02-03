@@ -53,7 +53,7 @@ def setup_venv(script_path):
     os.chdir(script_path)
 
     print('Installing venv package')
-    subprocess.run('sudo apt-get python3-venv',
+    subprocess.run('sudo apt-get install python3-venv',
                    stderr=subprocess.PIPE, check=True, shell=True)
 
     print('Creating virtual environment')
