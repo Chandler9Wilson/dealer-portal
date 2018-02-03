@@ -19,6 +19,10 @@ class Customer(db.Model):
         return "<User(id='%s', name='%s')>" % (
             self.id, self.name)
 
+    # CRED https://stackoverflow.com/a/11884806/6879253
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 
 class Facility(db.Model):
 
@@ -32,6 +36,10 @@ class Facility(db.Model):
     def __repr__(self):
         return "<User(id='%s', address='%s', customer_id='%s')>" % (
             self.id, self.address, self.customer_id)
+
+    # CRED https://stackoverflow.com/a/11884806/6879253
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class Device(db.Model):
@@ -50,6 +58,10 @@ class Device(db.Model):
             "location_description='%s', facility_id='%s')>" % (
                 self.id, self.hardware_id, self.device_type,
                 self.location_description, self.facility_id)
+
+    # CRED https://stackoverflow.com/a/11884806/6879253
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class Data(db.Model):
@@ -73,6 +85,10 @@ class Data(db.Model):
             "power='%s', operation='%s', fan_on='%s', device_id='%s')>" % (
                 self.id, self.timestamp, self.t1, self.t2, self.t3, self.power,
                 self.operation, self.fan_on, self.device_id)
+
+    # CRED https://stackoverflow.com/a/11884806/6879253
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 # Start user related tables

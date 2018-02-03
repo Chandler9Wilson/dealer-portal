@@ -5,7 +5,7 @@ import os
 import time
 
 from flask import Flask, session, render_template, request, url_for, flash, \
-    redirect, Response, make_response
+    redirect, Response, make_response, jsonify
 
 # flask-login used for login management and persistence
 from flask_login import LoginManager, login_user, login_required, current_user
@@ -128,6 +128,48 @@ def gconnect():
         return render_template('login.html')
 
     return render_template('directory.html')
+
+
+@app.route('/api/customers', methods=['GET'])
+def get_customers():
+    customer_list = Customer.query.limit(20).all()
+
+    customer_dict = []
+
+    for customer in customer_list:
+        customer_dict.append(Customer.as_dict(customer))
+
+    # makes a response object with a json dump
+    # http://flask.pocoo.org/docs/0.12/api/#flask.json.jsonify
+    return jsonify(customer_dict)
+
+
+@app.route('/api/facilities', methods=['GET'])
+def get_facilities():
+    facility_list = Facility.query.limit(20).all()
+
+    facility_dict = []
+
+    for facility in facility_list:
+        facility_dict.append(Facility.as_dict(facility))
+
+    # makes a response object with a json dump
+    # http://flask.pocoo.org/docs/0.12/api/#flask.json.jsonify
+    return jsonify(facility_dict)
+
+
+@app.route('/api/devices', methods=['GET'])
+def get_devices():
+    device_list = Device.query.limit(20).all()
+
+    device_dict = []
+
+    for device in device_list:
+        device_dict.append(Device.as_dict(device))
+
+    # makes a response object with a json dump
+    # http://flask.pocoo.org/docs/0.12/api/#flask.json.jsonify
+    return jsonify(device_dict)
 
 
 @app.context_processor

@@ -4,6 +4,7 @@
 
 ## TODO
 
+* Update fake_customer_data devices to have all required fields currently missing hardware_id
 * Frontend Menu layout
 * Display fake data
 * Implement flask principle for finer grained user permissions
