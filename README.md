@@ -44,3 +44,4 @@
 ## Resources
 
 * python subprocess [explanation](http://www.codecalamity.com/run-subprocess-run/)
+* [REST api](http://www.restapitutorial.com)

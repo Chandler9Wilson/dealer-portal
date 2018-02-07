@@ -5,7 +5,7 @@ import os
 import time
 
 from flask import Flask, session, render_template, request, url_for, flash, \
-    redirect, Response, make_response, jsonify
+    redirect, Response, make_response, jsonify, abort
 
 # flask-login used for login management and persistence
 from flask_login import LoginManager, login_user, login_required, current_user
@@ -18,7 +18,7 @@ from db.models import Customer, Facility, Device, \
 from google.oauth2 import id_token
 from google.auth.transport import requests as googleRequests
 
-# makes sure this is different from other files flask name or
+# makes sure this is different from other files flask(__name__) or
 # some storage is shared
 app = Flask(__name__)
 
@@ -71,10 +71,13 @@ def home():
     return render_template('directory.html')
 
 
-@app.route('/debug')
+@app.route('/debug/')
 def debug():
 
     return infoMessage
+
+
+# Begin POST only views mainly used for login
 
 
 @app.route('/gconnect/', methods=['POST'])
@@ -130,46 +133,82 @@ def gconnect():
     return render_template('directory.html')
 
 
-@app.route('/api/customers', methods=['GET'])
-def get_customers():
-    customer_list = Customer.query.limit(20).all()
+# Begin API views
 
+
+@app.route('/api/customers/', methods=['GET'])
+def get_customers():
+    # GET a list of up to the first 20 customers
+
+    customer_list = Customer.query.limit(20).all()
     customer_dict = []
 
     for customer in customer_list:
         customer_dict.append(Customer.as_dict(customer))
 
-    # makes a response object with a json dump
-    # http://flask.pocoo.org/docs/0.12/api/#flask.json.jsonify
     return jsonify(customer_dict)
+
+
+@app.route('/api/customers/<int:customer_id>', methods=['GET'])
+def get_customer(customer_id):
+    # Get a specific customer by id
+
+    customer = Customer.query.filter_by(id=customer_id).first()
+
+    if customer is None:
+        return abort(404)
+    else:
+        return jsonify(Customer.as_dict(customer))
 
 
 @app.route('/api/facilities', methods=['GET'])
 def get_facilities():
-    facility_list = Facility.query.limit(20).all()
+    # GET a list of up to the first 20 facilities
 
+    facility_list = Facility.query.limit(20).all()
     facility_dict = []
 
     for facility in facility_list:
         facility_dict.append(Facility.as_dict(facility))
 
-    # makes a response object with a json dump
-    # http://flask.pocoo.org/docs/0.12/api/#flask.json.jsonify
     return jsonify(facility_dict)
+
+
+@app.route('/api/facilities/<int:facility_id>', methods=['GET'])
+def get_facility(facility_id):
+    # Get a specific facility by id
+
+    facility = Facility.query.filter_by(id=facility_id).first()
+
+    if facility is None:
+        return abort(404)
+    else:
+        return jsonify(Facility.as_dict(facility))
 
 
 @app.route('/api/devices', methods=['GET'])
 def get_devices():
-    device_list = Device.query.limit(20).all()
+    # GET a list of up to the first 20 devices
 
+    device_list = Device.query.limit(20).all()
     device_dict = []
 
     for device in device_list:
         device_dict.append(Device.as_dict(device))
 
-    # makes a response object with a json dump
-    # http://flask.pocoo.org/docs/0.12/api/#flask.json.jsonify
     return jsonify(device_dict)
+
+
+@app.route('/api/devices/<int:device_id>', methods=['GET'])
+def get_device(device_id):
+    # Get a specific device by id
+
+    device = Device.query.filter_by(id=device_id).first()
+
+    if device is None:
+        return abort(404)
+    else:
+        return jsonify(Device.as_dict(device))
 
 
 @app.context_processor
