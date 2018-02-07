@@ -211,6 +211,14 @@ def get_device(device_id):
         return jsonify(Device.as_dict(device))
 
 
+@app.errorhandler(404)
+def not_found(error):
+    # handle 404 errors so that they make more sense for the api
+    # TODO make this error a bit more descriptive
+
+    return make_response(jsonify({'error': 'Not found'}), 404)
+
+
 @app.context_processor
 # TODO remove before deployment
 def override_url_for():
