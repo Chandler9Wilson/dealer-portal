@@ -177,6 +177,7 @@ def create_customer():
         db.session.commit()
 
     # TODO add a more descriptive message
+    # TODO add a 201 status code to request
     return 'Created a new customer'
 
 
@@ -190,6 +191,42 @@ def get_customer(customer_id):
         return abort(404)
     else:
         return jsonify(Customer.as_dict(customer))
+
+
+@app.route('/api/customers/<int:customer_id>', methods=['PUT'])
+def update_customer(customer_id):
+    # Update a customer by id
+    # Currently does not accept non existant customers (no new)
+
+    customer = Customer.query.filter_by(id=customer_id).first()
+
+    if customer is None:
+        return abort(404)
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_customer = request.get_json()
+
+    try:
+        name = raw_customer['name']
+    except KeyError as e:
+        error_message = 'KeyError - reason %s was not found' % str(e)
+        return jsonify(error_message)
+    except:
+        abort(400)
+        raise
+    else:
+        customer.name = name
+
+        # TODO add a try catch for sqlalchemy errors
+        db.session.commit()
+
+    # TODO add a more descriptive message
+    # TODO add a 201 status code to request
+    return 'Created a new customer'
 
 
 @app.route('/api/facilities', methods=['GET'])
