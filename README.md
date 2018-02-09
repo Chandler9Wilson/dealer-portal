@@ -19,6 +19,7 @@
 * remove all references to `catalog` changed name to `dealer_portal`
 * write documentation on db scripts
 * Make `import_fake_data.py` more robust e.g. able to add a device without customer or facility
+* Add better server side validation
 
 ## Development
 
