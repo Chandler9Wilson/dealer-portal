@@ -149,6 +149,37 @@ def get_customers():
     return jsonify(customer_dict)
 
 
+@app.route('/api/customers/', methods=['POST'])
+def create_customer():
+    # Create a new customer
+
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_customer = request.get_json()
+
+    try:
+        name = raw_customer['name']
+    except KeyError as e:
+        error_message = 'KeyError - reason %s was not found' % str(e)
+        return jsonify(error_message)
+    except:
+        abort(400)
+        raise
+    else:
+        new_customer = Customer(name=name)
+        db.session.add(new_customer)
+
+        # TODO add a try catch for sqlalchemy errors
+        db.session.commit()
+
+    # TODO add a more descriptive message
+    return 'Created a new customer'
+
+
 @app.route('/api/customers/<int:customer_id>', methods=['GET'])
 def get_customer(customer_id):
     # Get a specific customer by id
@@ -211,12 +242,33 @@ def get_device(device_id):
         return jsonify(Device.as_dict(device))
 
 
+# TODO this needs a better name
+# Begin flask modifications
+
+
+@app.errorhandler(400)
+def not_found(error):
+    # Handle 400 errors so that they make more sense for the api
+    # TODO make this error a bit more descriptive
+
+    return make_response(jsonify({'error': 'Failed to decode'}), 400)
+
+
 @app.errorhandler(404)
 def not_found(error):
-    # handle 404 errors so that they make more sense for the api
+    # Handle 404 errors so that they make more sense for the api
     # TODO make this error a bit more descriptive
 
     return make_response(jsonify({'error': 'Not found'}), 404)
+
+
+@app.errorhandler(415)
+def not_found(error):
+    # Handle 415 errors so that they make more sense for the api
+    # TODO make this error a bit more descriptive
+
+    return make_response(
+        jsonify({'error': 'You sent an unsupported media type'}), 415)
 
 
 @app.context_processor
