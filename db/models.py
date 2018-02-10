@@ -34,7 +34,8 @@ class Facility(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     address = db.Column(db.String, nullable=False)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
+    customer_id = db.Column(db.Integer, db.ForeignKey(
+        'customer.id', ondelete='SET NULL'))
 
     # Begin sqlalchemy specific code (wont be in the db)
 
@@ -58,7 +59,8 @@ class Device(db.Model):
     hardware_id = db.Column(db.String, nullable=False)
     device_type = db.Column(db.String, nullable=False)
     location_description = db.Column(db.String)
-    facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'))
+    facility_id = db.Column(db.Integer, db.ForeignKey(
+        'facility.id', ondelete='SET NULL'))
 
     # Begin sqlalchemy specific code (wont be in the db)
 
@@ -88,7 +90,9 @@ class Data(db.Model):
     power = db.Column(db.Float)
     operation = db.Column(db.String(4), nullable=False)
     fan_on = db.Column(db.Boolean, nullable=False)
-    device_id = db.Column(db.Integer, db.ForeignKey('device.id'))
+    # TODO Investigate if this should be kept or deleted
+    device_id = db.Column(db.Integer, db.ForeignKey(
+        'device.id', ondelete='SET NULL'))
 
     # Begin sqlalchemy specific code (wont be in the db)
 
