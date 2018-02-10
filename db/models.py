@@ -15,6 +15,10 @@ class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
 
+    # Begin sqlalchemy specific code (wont be in the db)
+
+    facilities = db.relationship('Facility', back_populates='customer')
+
     def __repr__(self):
         return "<User(id='%s', name='%s')>" % (
             self.id, self.name)
@@ -31,7 +35,11 @@ class Facility(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     address = db.Column(db.String, nullable=False)
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
-    customer = db.relationship(Customer)
+
+    # Begin sqlalchemy specific code (wont be in the db)
+
+    customer = db.relationship('Customer', back_populates='facilities')
+    devices = db.relationship('Device', back_populates='facility')
 
     def __repr__(self):
         return "<User(id='%s', address='%s', customer_id='%s')>" % (
@@ -51,7 +59,10 @@ class Device(db.Model):
     device_type = db.Column(db.String, nullable=False)
     location_description = db.Column(db.String)
     facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'))
-    facility = db.relationship(Facility)
+
+    # Begin sqlalchemy specific code (wont be in the db)
+
+    facility = db.relationship('Facility', back_populates='devices')
 
     def __repr__(self):
         return "<User(id='%s', hardware_id='%s', device_type='%s'," + \
@@ -78,7 +89,10 @@ class Data(db.Model):
     operation = db.Column(db.String(4), nullable=False)
     fan_on = db.Column(db.Boolean, nullable=False)
     device_id = db.Column(db.Integer, db.ForeignKey('device.id'))
-    device = db.relationship(Device)
+
+    # Begin sqlalchemy specific code (wont be in the db)
+
+    device = db.relationship('Device')
 
     def __repr__(self):
         return "<User(id='%s', timestamp='%s', t1='%s', t2='%s', t3='%s', " + \
@@ -139,9 +153,12 @@ class UserToFacility(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship(User)
     facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'))
-    facility = db.relationship(Facility)
+
+    # Begin sqlalchemy specific code (wont be in the db)
+
+    user = db.relationship('User')
+    facility = db.relationship('Facility')
 
     def __repr__(self):
         return "<User(id='%s', user_id='%s', facility_id='%s')>" % (
@@ -155,7 +172,10 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(20), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship(User)
+
+    # Begin sqlalchemy specific code (wont be in the db)
+
+    user = db.relationship('User')
 
     def __repr__(self):
         return "<User(id='%s', title='%s', user_id='%s')>" % (
