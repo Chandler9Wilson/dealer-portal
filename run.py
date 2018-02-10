@@ -226,7 +226,24 @@ def update_customer(customer_id):
 
     # TODO add a more descriptive message
     # TODO add a 201 status code to request
-    return 'Created a new customer'
+    return 'Updated the customer'
+
+
+@app.route('/api/customers/<int:customer_id>', methods=['DELETE'])
+def delete_customer(customer_id):
+    # Get a specific customer by id
+
+    customer = Customer.query.filter_by(id=customer_id).first()
+
+    if customer is None:
+        return abort(404)
+    else:
+        db.session.delete(customer)
+
+        # TODO add a try catch for sqlalchemy errors
+        db.session.commit()
+
+        return 'Deleted the customer'
 
 
 @app.route('/api/facilities', methods=['GET'])

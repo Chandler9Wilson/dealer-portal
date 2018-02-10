@@ -46,3 +46,4 @@
 
 * python subprocess [explanation](http://www.codecalamity.com/run-subprocess-run/)
 * [REST api](http://www.restapitutorial.com)
+* [python import confustion](http://effbot.org/zone/import-confusion.htm)
