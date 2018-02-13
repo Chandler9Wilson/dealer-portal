@@ -279,14 +279,9 @@ def delete_customer(customer_id):
 @app.route('/api/facilities/', methods=['GET'])
 def get_facilities():
     # GET a list of up to the first 20 facilities
+    facility_json = get_items(Facility)
 
-    facility_list = Facility.query.limit(20).all()
-    facility_dict = []
-
-    for facility in facility_list:
-        facility_dict.append(Facility.as_dict(facility))
-
-    return jsonify(facility_dict)
+    return facility_json
 
 
 @app.route('/api/facilities/', methods=['POST'])
@@ -330,14 +325,9 @@ def get_facility(facility_id):
 @app.route('/api/devices/', methods=['GET'])
 def get_devices():
     # GET a list of up to the first 20 devices
+    device_json = get_items(Device)
 
-    device_list = Device.query.limit(20).all()
-    device_dict = []
-
-    for device in device_list:
-        device_dict.append(Device.as_dict(device))
-
-    return jsonify(device_dict)
+    return device_json
 
 
 @app.route('/api/devices/', methods=['POST'])
