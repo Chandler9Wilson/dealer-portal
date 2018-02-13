@@ -136,7 +136,7 @@ def gconnect():
 # Begin API views
 
 
-def get_item(db_class):
+def get_items(db_class):
     # Retrieves up to the first 20 items of a db_class defined in models
 
     item_list = db_class.query.limit(20).all()
@@ -180,7 +180,7 @@ def create_item(db_class, request_json, required_columns):
 @app.route('/api/customers/', methods=['GET'])
 def get_customers():
     # GET a list of up to the first 20 customers
-    customer_json = get_item(Customer)
+    customer_json = get_items(Customer)
 
     return customer_json
 
@@ -276,7 +276,7 @@ def delete_customer(customer_id):
         return 'Deleted the customer'
 
 
-@app.route('/api/facilities', methods=['GET'])
+@app.route('/api/facilities/', methods=['GET'])
 def get_facilities():
     # GET a list of up to the first 20 facilities
 
@@ -287,6 +287,32 @@ def get_facilities():
         facility_dict.append(Facility.as_dict(facility))
 
     return jsonify(facility_dict)
+
+
+@app.route('/api/facilities/', methods=['POST'])
+def create_facility():
+    # Create a new facility
+
+    required_columns = ['address']
+
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_facility = request.get_json()
+
+    # create_item() handles class creation and db commit
+    instance = create_item(Facility, raw_facility, required_columns)
+
+    try:
+        facility_address = instance.address
+        # TODO create custom handler for api success
+        return 'Facility created with address %s' % (facility_address)
+    except:
+        # TODO pass more helpfull messages
+        abort(400)
+        raise
 
 
 @app.route('/api/facilities/<int:facility_id>', methods=['GET'])
@@ -301,7 +327,7 @@ def get_facility(facility_id):
         return jsonify(Facility.as_dict(facility))
 
 
-@app.route('/api/devices', methods=['GET'])
+@app.route('/api/devices/', methods=['GET'])
 def get_devices():
     # GET a list of up to the first 20 devices
 
@@ -312,6 +338,32 @@ def get_devices():
         device_dict.append(Device.as_dict(device))
 
     return jsonify(device_dict)
+
+
+@app.route('/api/devices/', methods=['POST'])
+def create_device():
+    # Create a new device
+
+    required_columns = ['device_type', 'hardware_id']
+
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_device = request.get_json()
+
+    # create_item() handles class creation and db commit
+    instance = create_item(Device, raw_device, required_columns)
+
+    try:
+        device_id = instance.hardware_id
+        # TODO create custom handler for api success
+        return 'Device created with hardware id %s' % (device_id)
+    except:
+        # TODO pass more helpfull messages
+        abort(400)
+        raise
 
 
 @app.route('/api/devices/<int:device_id>', methods=['GET'])

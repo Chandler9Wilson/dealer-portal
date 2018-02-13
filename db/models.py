@@ -30,6 +30,8 @@ class Customer(db.Model):
     # CRED https://stackoverflow.com/a/30114013/6879253
     @classmethod
     def from_dict(cls, d):
+        # allows the class to be created from a dict (d)
+
         allowed = ['name']
 
         dict_filter = {key: value for key,
@@ -60,6 +62,18 @@ class Facility(db.Model):
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
+    # CRED https://stackoverflow.com/a/30114013/6879253
+    @classmethod
+    def from_dict(cls, d):
+        # allows the class to be created from a dict (d)
+
+        allowed = ['address', 'customer_id']
+
+        dict_filter = {key: value for key,
+                       value in d.items() if key in allowed}
+
+        return cls(**dict_filter)
+
 
 class Device(db.Model):
 
@@ -85,6 +99,19 @@ class Device(db.Model):
     # CRED https://stackoverflow.com/a/11884806/6879253
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+    # CRED https://stackoverflow.com/a/30114013/6879253
+    @classmethod
+    def from_dict(cls, d):
+        # allows the class to be created from a dict (d)
+
+        allowed = ['hardware_id', 'device_type',
+                   'location_description', 'facility_id']
+
+        dict_filter = {key: value for key,
+                       value in d.items() if key in allowed}
+
+        return cls(**dict_filter)
 
 
 class Data(db.Model):
@@ -117,6 +144,19 @@ class Data(db.Model):
     # CRED https://stackoverflow.com/a/11884806/6879253
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+    # CRED https://stackoverflow.com/a/30114013/6879253
+    @classmethod
+    def from_dict(cls, d):
+        # allows the class to be created from a dict (d)
+
+        allowed = ['timestamp', 't1', 't2', 't3',
+                   'power', 'operation', 'fan_on', 'device_id']
+
+        dict_filter = {key: value for key,
+                       value in d.items() if key in allowed}
+
+        return cls(**dict_filter)
 
 
 # Start user related tables
