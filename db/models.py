@@ -27,6 +27,16 @@ class Customer(db.Model):
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
+    # CRED https://stackoverflow.com/a/30114013/6879253
+    @classmethod
+    def from_dict(cls, d):
+        allowed = ['name']
+
+        dict_filter = {key: value for key,
+                       value in d.items() if key in allowed}
+
+        return cls(**dict_filter)
+
 
 class Facility(db.Model):
 

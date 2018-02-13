@@ -136,33 +136,29 @@ def gconnect():
 # Begin API views
 
 
-@app.route('/api/customers/', methods=['GET'])
-def get_customers():
-    # GET a list of up to the first 20 customers
+def get_item(db_class):
+    # Retrieves up to the first 20 items of a db_class defined in models
 
-    customer_list = Customer.query.limit(20).all()
-    customer_dict = []
+    item_list = db_class.query.limit(20).all()
+    # Really a list of dictionaries but couldn't think of a better name
+    item_dicts = []
 
-    for customer in customer_list:
-        customer_dict.append(Customer.as_dict(customer))
+    for item in item_list:
+        item_dicts.append(db_class.as_dict(item))
 
-    return jsonify(customer_dict)
+    # Might want to move jsonify to the view function?
+    return jsonify(item_dicts)
 
 
-@app.route('/api/customers/', methods=['POST'])
-def create_customer():
-    # Create a new customer
+def create_item(db_class, request_json, required_columns):
+    # Creates a db entry with data from request_json,
+    # schema from columns and db_class
 
-    if request.get_json() is None:
-        # This is triggered if the mimetype is not application/json
-        return abort(415)
-
-    # If get_json() decoding fails it will call \
-    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
-    raw_customer = request.get_json()
+    item_columns = {}
 
     try:
-        name = raw_customer['name']
+        for column in required_columns:
+            item_columns[column] = request_json[column]
     except KeyError as e:
         error_message = 'KeyError - reason %s was not found' % str(e)
         return jsonify(error_message)
@@ -170,15 +166,49 @@ def create_customer():
         abort(400)
         raise
     else:
-        new_customer = Customer(name=name)
-        db.session.add(new_customer)
+        new_item = db_class.from_dict(item_columns)
+        db.session.add(new_item)
 
         # TODO add a try catch for sqlalchemy errors
         db.session.commit()
 
     # TODO add a more descriptive message
     # TODO add a 201 status code to request
-    return 'Created a new customer'
+    return new_item
+
+
+@app.route('/api/customers/', methods=['GET'])
+def get_customers():
+    # GET a list of up to the first 20 customers
+    customer_json = get_item(Customer)
+
+    return customer_json
+
+
+@app.route('/api/customers/', methods=['POST'])
+def create_customer():
+    # Create a new customer
+
+    required_columns = ['name']
+
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_customer = request.get_json()
+
+    # create_item() handles class creation and db commit
+    instance = create_item(Customer, raw_customer, required_columns)
+
+    try:
+        customer_name = instance.name
+        # TODO create custom handler for api success
+        return 'Customer created with name %s' % (customer_name)
+    except:
+        # TODO pass more helpfull messages
+        abort(400)
+        raise
 
 
 @app.route('/api/customers/<int:customer_id>', methods=['GET'])
@@ -300,6 +330,7 @@ def get_device(device_id):
 # Begin flask modifications
 
 
+# TODO customer messages https://stackoverflow.com/a/21301229/6879253
 @app.errorhandler(400)
 def not_found(error):
     # Handle 400 errors so that they make more sense for the api
