@@ -329,6 +329,34 @@ def get_facility(facility_id):
         return jsonify(Facility.as_dict(facility))
 
 
+@app.route('/api/facilities/<int:facility_id>', methods=['PUT'])
+def update_facility(facility_id):
+    # Update a facility by id
+    # Currently does not accept non existant facilities (no new)
+
+    facility = Facility.query.filter_by(id=facility_id).first()
+
+    if facility is None:
+        return abort(404)
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_update = request.get_json()
+
+    updated_facility = update_item(Facility, facility, raw_update)
+
+    # TODO add a more descriptive message
+    # TODO add a 201 status code to request
+    try:
+        return jsonify(updated_facility.as_dict())
+    except:
+        abort(400)
+        raise
+
+
 @app.route('/api/devices/', methods=['GET'])
 def get_devices():
     # GET a list of up to the first 20 devices
@@ -373,6 +401,34 @@ def get_device(device_id):
         return abort(404)
     else:
         return jsonify(Device.as_dict(device))
+
+
+@app.route('/api/devices/<int:device_id>', methods=['PUT'])
+def update_device(device_id):
+    # Update a device by id
+    # Currently does not accept non existant devices (no new)
+
+    device = Device.query.filter_by(id=device_id).first()
+
+    if device is None:
+        return abort(404)
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_update = request.get_json()
+
+    updated_device = update_item(Device, device, raw_update)
+
+    # TODO add a more descriptive message
+    # TODO add a 201 status code to request
+    try:
+        return jsonify(updated_device.as_dict())
+    except:
+        abort(400)
+        raise
 
 
 # TODO this needs a better name
