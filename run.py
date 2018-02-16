@@ -133,7 +133,7 @@ def gconnect():
     return render_template('directory.html')
 
 
-# Begin API views
+# Begin API views and functions
 
 
 def get_items(db_class):
@@ -175,6 +175,21 @@ def create_item(db_class, request_json, required_columns):
     # TODO add a more descriptive message
     # TODO add a 201 status code to request
     return new_item
+
+
+def update_item(db_class, item, request_json):
+    # loop through an item and update any valid changes
+
+    for attribute, value in request_json.items():
+        if attribute in item.required_columns() and value is not None:
+            setattr(item, attribute, value)
+        elif attribute in item.available_columns():
+            setattr(item, attribute, value)
+
+    # TODO add a try catch for sqlalchemy errors
+    db.session.commit()
+
+    return item
 
 
 @app.route('/api/customers/', methods=['GET'])
@@ -238,25 +253,17 @@ def update_customer(customer_id):
 
     # If get_json() decoding fails it will call \
     # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
-    raw_customer = request.get_json()
+    raw_update = request.get_json()
 
-    try:
-        name = raw_customer['name']
-    except KeyError as e:
-        error_message = 'KeyError - reason %s was not found' % str(e)
-        return jsonify(error_message)
-    except:
-        abort(400)
-        raise
-    else:
-        customer.name = name
-
-        # TODO add a try catch for sqlalchemy errors
-        db.session.commit()
+    updated_customer = update_item(Customer, customer, raw_update)
 
     # TODO add a more descriptive message
     # TODO add a 201 status code to request
-    return 'Updated the customer'
+    try:
+        return jsonify(updated_customer.as_dict())
+    except:
+        abort(400)
+        raise
 
 
 @app.route('/api/customers/<int:customer_id>', methods=['DELETE'])
