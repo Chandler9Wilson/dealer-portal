@@ -82,6 +82,24 @@ class Facility(db.Model):
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
+    def required_columns(self):
+        # returns all required (nullable=False) columns \
+        # excluding primary key in a list
+
+        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
+        columns = [
+            c.name for c in self.__table__.columns if not c.nullable and not
+            c.primary_key]
+        return columns
+
+    def available_columns(self):
+        # returns all available columns excluding primary key in a list
+
+        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
+        columns = [
+            c.name for c in self.__table__.columns if not c.primary_key]
+        return columns
+
     # CRED https://stackoverflow.com/a/30114013/6879253
     @classmethod
     def from_dict(cls, d):
@@ -119,6 +137,24 @@ class Device(db.Model):
     # CRED https://stackoverflow.com/a/11884806/6879253
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+    def required_columns(self):
+        # returns all required (nullable=False) columns \
+        # excluding primary key in a list
+
+        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
+        columns = [
+            c.name for c in self.__table__.columns if not c.nullable and not
+            c.primary_key]
+        return columns
+
+    def available_columns(self):
+        # returns all available columns excluding primary key in a list
+
+        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
+        columns = [
+            c.name for c in self.__table__.columns if not c.primary_key]
+        return columns
 
     # CRED https://stackoverflow.com/a/30114013/6879253
     @classmethod
@@ -164,6 +200,24 @@ class Data(db.Model):
     # CRED https://stackoverflow.com/a/11884806/6879253
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+    def required_columns(self):
+        # returns all required (nullable=False) columns \
+        # excluding primary key in a list
+
+        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
+        columns = [
+            c.name for c in self.__table__.columns if not c.nullable and not
+            c.primary_key]
+        return columns
+
+    def available_columns(self):
+        # returns all available columns excluding primary key in a list
+
+        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
+        columns = [
+            c.name for c in self.__table__.columns if not c.primary_key]
+        return columns
 
     # CRED https://stackoverflow.com/a/30114013/6879253
     @classmethod
@@ -219,6 +273,24 @@ class User(db.Model):
     def get_id(self):
         return str(self.id)
 
+    def required_columns(self):
+        # returns all required (nullable=False) columns \
+        # excluding primary key in a list
+
+        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
+        columns = [
+            c.name for c in self.__table__.columns if not c.nullable and not
+            c.primary_key]
+        return columns
+
+    def available_columns(self):
+        # returns all available columns excluding primary key in a list
+
+        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
+        columns = [
+            c.name for c in self.__table__.columns if not c.primary_key]
+        return columns
+
 
 class UserToFacility(db.Model):
     # A workers db.relationship to a facility to be used with permissions
@@ -238,6 +310,24 @@ class UserToFacility(db.Model):
         return "<User(id='%s', user_id='%s', facility_id='%s')>" % (
             self.id, self.user_id, self.facility_id)
 
+    def required_columns(self):
+        # returns all required (nullable=False) columns \
+        # excluding primary key in a list
+
+        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
+        columns = [
+            c.name for c in self.__table__.columns if not c.nullable and not
+            c.primary_key]
+        return columns
+
+    def available_columns(self):
+        # returns all available columns excluding primary key in a list
+
+        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
+        columns = [
+            c.name for c in self.__table__.columns if not c.primary_key]
+        return columns
+
 
 class Role(db.Model):
     # A users Role e.g. contracter, admin
@@ -254,3 +344,21 @@ class Role(db.Model):
     def __repr__(self):
         return "<User(id='%s', title='%s', user_id='%s')>" % (
             self.id, self.title, self.user_id)
+
+    def required_columns(self):
+        # returns all required (nullable=False) columns \
+        # excluding primary key in a list
+
+        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
+        columns = [
+            c.name for c in self.__table__.columns if not c.nullable and not
+            c.primary_key]
+        return columns
+
+    def available_columns(self):
+        # returns all available columns excluding primary key in a list
+
+        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
+        columns = [
+            c.name for c in self.__table__.columns if not c.primary_key]
+        return columns
