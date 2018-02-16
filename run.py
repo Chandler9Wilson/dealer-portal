@@ -268,7 +268,7 @@ def update_customer(customer_id):
 
 @app.route('/api/customers/<int:customer_id>', methods=['DELETE'])
 def delete_customer(customer_id):
-    # Get a specific customer by id
+    # Delete a specific customer by id
 
     customer = Customer.query.filter_by(id=customer_id).first()
 
@@ -357,6 +357,23 @@ def update_facility(facility_id):
         raise
 
 
+@app.route('/api/facilities/<int:facility_id>', methods=['DELETE'])
+def delete_facility(facility_id):
+    # Delete a specific facility by id
+
+    facility = Facility.query.filter_by(id=facility_id).first()
+
+    if facility is None:
+        return abort(404)
+    else:
+        db.session.delete(facility)
+
+        # TODO add a try catch for sqlalchemy errors
+        db.session.commit()
+
+        return 'Deleted the facility'
+
+
 @app.route('/api/devices/', methods=['GET'])
 def get_devices():
     # GET a list of up to the first 20 devices
@@ -429,6 +446,23 @@ def update_device(device_id):
     except:
         abort(400)
         raise
+
+
+@app.route('/api/devices/<int:device_id>', methods=['DELETE'])
+def delete_device(device_id):
+    # Delete a specific device by id
+
+    device = Device.query.filter_by(id=device_id).first()
+
+    if device is None:
+        return abort(404)
+    else:
+        db.session.delete(device)
+
+        # TODO add a try catch for sqlalchemy errors
+        db.session.commit()
+
+        return 'Deleted the device'
 
 
 # TODO this needs a better name
