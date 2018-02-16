@@ -25,7 +25,26 @@ class Customer(db.Model):
 
     # CRED https://stackoverflow.com/a/11884806/6879253
     def as_dict(self):
+        # returns an easily serializable dict
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+    def required_columns(self):
+        # returns all required (nullable=False) columns \
+        # excluding primary key in a list
+
+        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
+        columns = [
+            c.name for c in self.__table__.columns if not c.nullable and not
+            c.primary_key]
+        return columns
+
+    def available_columns(self):
+        # returns all available columns excluding primary key in a list
+
+        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
+        columns = [
+            c.name for c in self.__table__.columns if not c.primary_key]
+        return columns
 
     # CRED https://stackoverflow.com/a/30114013/6879253
     @classmethod
@@ -34,6 +53,7 @@ class Customer(db.Model):
 
         allowed = ['name']
 
+        # https://www.python.org/dev/peps/pep-0274/
         dict_filter = {key: value for key,
                        value in d.items() if key in allowed}
 
