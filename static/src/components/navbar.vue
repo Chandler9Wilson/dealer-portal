@@ -17,9 +17,9 @@
             </a>
 
             <div class="navbar-dropdown">
-              <a class="navbar-item">Facility</a>
-              <a class="navbar-item">Customer</a>
-              <a class="navbar-item">Device</a>
+              <router-link to="/facility" class="navbar-item">Facility</router-link>
+              <router-link to="/customer" class="navbar-item">Customer</router-link>
+              <router-link to="/device" class="navbar-item">Device</router-link>
             </div>
           </div>
         </div>
