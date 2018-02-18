@@ -9,7 +9,7 @@
     <div class="navbar-menu">
         <!-- Left side of the navbar after the brand image -->
         <div class="navbar-start">
-          <a class="navbar-item" href="/home">Home</a>
+          <router-link to="/" class="navbar-item">Home</router-link>
 
           <div class="navbar-item has-dropdown" v-bind:class="{'is-active': isActive}" @click="isActive = !isActive">
             <a class="navbar-link">
