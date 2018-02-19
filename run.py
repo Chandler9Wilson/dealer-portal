@@ -101,7 +101,8 @@ def gconnect():
         #     raise ValueError('Could not verify audience.')
 
         # Checks if issuer of the token is google
-        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+        if idinfo['iss'] not in ['accounts.google.com',
+                                 'https://accounts.google.com']:
             raise ValueError('Wrong issuer.')
         else:
             # Check if user is in the DB
@@ -150,15 +151,21 @@ def get_items(db_class):
     return jsonify(item_dicts)
 
 
-def create_item(db_class, request_json, required_columns):
+def create_item(db_class, request_json):
     # Creates a db entry with data from request_json,
     # schema from columns and db_class
 
-    item_columns = {}
+    required_columns = db_class.required_columns()
 
     try:
+        # TODO change to a list comprehension
         for column in required_columns:
-            item_columns[column] = request_json[column]
+            required_attribute = request_json.get(column)
+
+            if required_attribute is not None:
+                continue
+            elif required_attribute is None:
+                raise ValueError('A required attribute had a value of None')
     except KeyError as e:
         error_message = 'KeyError - reason %s was not found' % str(e)
         return jsonify(error_message)
@@ -166,7 +173,7 @@ def create_item(db_class, request_json, required_columns):
         abort(400)
         raise
     else:
-        new_item = db_class.from_dict(item_columns)
+        new_item = db_class.from_dict(request_json)
         db.session.add(new_item)
 
         # TODO add a try catch for sqlalchemy errors
@@ -181,9 +188,9 @@ def update_item(db_class, item, request_json):
     # loop through an item and update any valid changes
 
     for attribute, value in request_json.items():
-        if attribute in item.required_columns() and value is not None:
+        if attribute in db_class.required_columns() and value is not None:
             setattr(item, attribute, value)
-        elif attribute in item.available_columns():
+        elif attribute in db_class.available_columns():
             setattr(item, attribute, value)
 
     # TODO add a try catch for sqlalchemy errors
@@ -204,8 +211,6 @@ def get_customers():
 def create_customer():
     # Create a new customer
 
-    required_columns = ['name']
-
     if request.get_json() is None:
         # This is triggered if the mimetype is not application/json
         return abort(415)
@@ -214,12 +219,10 @@ def create_customer():
     raw_customer = request.get_json()
 
     # create_item() handles class creation and db commit
-    instance = create_item(Customer, raw_customer, required_columns)
+    instance = create_item(Customer, raw_customer)
 
     try:
-        customer_name = instance.name
-        # TODO create custom handler for api success
-        return 'Customer created with name %s' % (customer_name)
+        return jsonify(instance.as_dict())
     except:
         # TODO pass more helpfull messages
         abort(400)
@@ -295,8 +298,6 @@ def get_facilities():
 def create_facility():
     # Create a new facility
 
-    required_columns = ['address']
-
     if request.get_json() is None:
         # This is triggered if the mimetype is not application/json
         return abort(415)
@@ -305,7 +306,7 @@ def create_facility():
     raw_facility = request.get_json()
 
     # create_item() handles class creation and db commit
-    instance = create_item(Facility, raw_facility, required_columns)
+    instance = create_item(Facility, raw_facility)
 
     try:
         facility_address = instance.address
@@ -386,8 +387,6 @@ def get_devices():
 def create_device():
     # Create a new device
 
-    required_columns = ['device_type', 'hardware_id']
-
     if request.get_json() is None:
         # This is triggered if the mimetype is not application/json
         return abort(415)
@@ -396,7 +395,7 @@ def create_device():
     raw_device = request.get_json()
 
     # create_item() handles class creation and db commit
-    instance = create_item(Device, raw_device, required_columns)
+    instance = create_item(Device, raw_device)
 
     try:
         device_id = instance.hardware_id
@@ -465,11 +464,34 @@ def delete_device(device_id):
         return 'Deleted the device'
 
 
+@app.route('/api/data/', methods=['POST'])
+def new_data():
+    # Takes a data json and adds to db
+
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_data = request.get_json()
+
+    # create_item() handles class creation and db commit
+    instance = create_item(Data, raw_data)
+
+    try:
+        return jsonify(instance.as_dict())
+    except:
+        # TODO pass more helpfull messages
+        abort(400)
+        raise
+
+
 # TODO this needs a better name
 # Begin flask modifications
 
-
 # TODO customer messages https://stackoverflow.com/a/21301229/6879253
+
+
 @app.errorhandler(400)
 def not_found(error):
     # Handle 400 errors so that they make more sense for the api
