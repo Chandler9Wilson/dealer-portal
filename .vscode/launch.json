@@ -2,39 +2,26 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Flask",
+      "name": "Python: Flask (0.11.x or later)",
       "type": "python",
       "request": "launch",
-      "stopOnEntry": true,
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "module": "flask",
       "pythonPath": "${config:python.pythonPath}",
-      "program": "${workspaceRoot}/env/bin/flask",
+      "cwd": "${workspaceFolder}",
       "env": {
-        "FLASK_APP": "${workspaceRoot}/run.py"
+        "FLASK_APP": "${workspaceFolder}/run.py"
       },
       "args": [
         "run",
         "--no-debugger",
         "--no-reload"
       ],
+      "envFile": "${workspaceFolder}/.env",
       "debugOptions": [
         "RedirectOutput"
       ]
-    },
-    {
-      "name": "Python",
-      "type": "python",
-      "pythonPath": "${config:python.pythonPath}",
-      "request": "launch",
-      "stopOnEntry": true,
-      "console": "none",
-      "program": "${file}",
-      "cwd": "${workspaceFolder}",
-      "debugOptions": [
-        "RedirectOutput"
-      ],
-      "env": {
-        "name": "value"
-      }
     }
   ]
 }
