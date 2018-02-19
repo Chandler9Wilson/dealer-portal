@@ -31,6 +31,8 @@
 
 ## Debugging
 
+* with pudb (recommended)
+  * insert where you want a breakpoint `from pudb import set_trace; set_trace()`
 * with pdb
   * insert `import pdb`
   * && `pdb.set_trace()`
