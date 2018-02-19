@@ -28,22 +28,24 @@ class Customer(db.Model):
         # returns an easily serializable dict
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-    def required_columns(self):
+    @classmethod
+    def required_columns(cls):
         # returns all required (nullable=False) columns \
         # excluding primary key in a list
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
-            c.name for c in self.__table__.columns if not c.nullable and not
+            c.name for c in cls.__table__.columns if not c.nullable and not
             c.primary_key]
         return columns
 
-    def available_columns(self):
+    @classmethod
+    def available_columns(cls):
         # returns all available columns excluding primary key in a list
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
-            c.name for c in self.__table__.columns if not c.primary_key]
+            c.name for c in cls.__table__.columns if not c.primary_key]
         return columns
 
     # CRED https://stackoverflow.com/a/30114013/6879253
@@ -51,7 +53,7 @@ class Customer(db.Model):
     def from_dict(cls, d):
         # allows the class to be created from a dict (d)
 
-        allowed = ['name']
+        allowed = cls.available_columns()
 
         # https://www.python.org/dev/peps/pep-0274/
         dict_filter = {key: value for key,
@@ -82,22 +84,24 @@ class Facility(db.Model):
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-    def required_columns(self):
+    @classmethod
+    def required_columns(cls):
         # returns all required (nullable=False) columns \
         # excluding primary key in a list
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
-            c.name for c in self.__table__.columns if not c.nullable and not
+            c.name for c in cls.__table__.columns if not c.nullable and not
             c.primary_key]
         return columns
 
-    def available_columns(self):
+    @classmethod
+    def available_columns(cls):
         # returns all available columns excluding primary key in a list
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
-            c.name for c in self.__table__.columns if not c.primary_key]
+            c.name for c in cls.__table__.columns if not c.primary_key]
         return columns
 
     # CRED https://stackoverflow.com/a/30114013/6879253
@@ -105,7 +109,7 @@ class Facility(db.Model):
     def from_dict(cls, d):
         # allows the class to be created from a dict (d)
 
-        allowed = ['address', 'customer_id']
+        allowed = cls.available_columns
 
         dict_filter = {key: value for key,
                        value in d.items() if key in allowed}
@@ -120,7 +124,7 @@ class Device(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     hardware_id = db.Column(db.String, nullable=False)
     device_type = db.Column(db.String, nullable=False)
-    location_description = db.Column(db.String)
+    hvac_description = db.Column(db.String)
     facility_id = db.Column(db.Integer, db.ForeignKey(
         'facility.id', ondelete='SET NULL'))
 
@@ -130,30 +134,32 @@ class Device(db.Model):
 
     def __repr__(self):
         return "<User(id='%s', hardware_id='%s', device_type='%s'," + \
-            "location_description='%s', facility_id='%s')>" % (
+            "hvac_description='%s', facility_id='%s')>" % (
                 self.id, self.hardware_id, self.device_type,
-                self.location_description, self.facility_id)
+                self.hvac_description, self.facility_id)
 
     # CRED https://stackoverflow.com/a/11884806/6879253
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-    def required_columns(self):
+    @classmethod
+    def required_columns(cls):
         # returns all required (nullable=False) columns \
         # excluding primary key in a list
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
-            c.name for c in self.__table__.columns if not c.nullable and not
+            c.name for c in cls.__table__.columns if not c.nullable and not
             c.primary_key]
         return columns
 
-    def available_columns(self):
+    @classmethod
+    def available_columns(cls):
         # returns all available columns excluding primary key in a list
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
-            c.name for c in self.__table__.columns if not c.primary_key]
+            c.name for c in cls.__table__.columns if not c.primary_key]
         return columns
 
     # CRED https://stackoverflow.com/a/30114013/6879253
@@ -161,8 +167,7 @@ class Device(db.Model):
     def from_dict(cls, d):
         # allows the class to be created from a dict (d)
 
-        allowed = ['hardware_id', 'device_type',
-                   'location_description', 'facility_id']
+        cls.available_columns
 
         dict_filter = {key: value for key,
                        value in d.items() if key in allowed}
@@ -181,9 +186,8 @@ class Data(db.Model):
     t2 = db.Column(db.Float)
     t3 = db.Column(db.Float)
     power = db.Column(db.Float)
-    operation = db.Column(db.String(4), nullable=False)
-    fan_on = db.Column(db.Boolean, nullable=False)
-    # TODO Investigate if this should be kept or deleted
+    operation = db.Column(db.String(4))
+    fan_on = db.Column(db.Boolean)
     device_id = db.Column(db.Integer, db.ForeignKey(
         'device.id', ondelete='SET NULL'))
 
@@ -201,22 +205,24 @@ class Data(db.Model):
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-    def required_columns(self):
+    @classmethod
+    def required_columns(cls):
         # returns all required (nullable=False) columns \
         # excluding primary key in a list
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
-            c.name for c in self.__table__.columns if not c.nullable and not
+            c.name for c in cls.__table__.columns if not c.nullable and not
             c.primary_key]
         return columns
 
-    def available_columns(self):
+    @classmethod
+    def available_columns(cls):
         # returns all available columns excluding primary key in a list
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
-            c.name for c in self.__table__.columns if not c.primary_key]
+            c.name for c in cls.__table__.columns if not c.primary_key]
         return columns
 
     # CRED https://stackoverflow.com/a/30114013/6879253
@@ -224,8 +230,7 @@ class Data(db.Model):
     def from_dict(cls, d):
         # allows the class to be created from a dict (d)
 
-        allowed = ['timestamp', 't1', 't2', 't3',
-                   'power', 'operation', 'fan_on', 'device_id']
+        allowed = cls.available_columns()
 
         dict_filter = {key: value for key,
                        value in d.items() if key in allowed}
@@ -273,22 +278,24 @@ class User(db.Model):
     def get_id(self):
         return str(self.id)
 
-    def required_columns(self):
+    @classmethod
+    def required_columns(cls):
         # returns all required (nullable=False) columns \
         # excluding primary key in a list
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
-            c.name for c in self.__table__.columns if not c.nullable and not
+            c.name for c in cls.__table__.columns if not c.nullable and not
             c.primary_key]
         return columns
 
-    def available_columns(self):
+    @classmethod
+    def available_columns(cls):
         # returns all available columns excluding primary key in a list
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
-            c.name for c in self.__table__.columns if not c.primary_key]
+            c.name for c in cls.__table__.columns if not c.primary_key]
         return columns
 
 
@@ -310,22 +317,24 @@ class UserToFacility(db.Model):
         return "<User(id='%s', user_id='%s', facility_id='%s')>" % (
             self.id, self.user_id, self.facility_id)
 
-    def required_columns(self):
+    @classmethod
+    def required_columns(cls):
         # returns all required (nullable=False) columns \
         # excluding primary key in a list
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
-            c.name for c in self.__table__.columns if not c.nullable and not
+            c.name for c in cls.__table__.columns if not c.nullable and not
             c.primary_key]
         return columns
 
-    def available_columns(self):
+    @classmethod
+    def available_columns(cls):
         # returns all available columns excluding primary key in a list
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
-            c.name for c in self.__table__.columns if not c.primary_key]
+            c.name for c in cls.__table__.columns if not c.primary_key]
         return columns
 
 
@@ -345,20 +354,22 @@ class Role(db.Model):
         return "<User(id='%s', title='%s', user_id='%s')>" % (
             self.id, self.title, self.user_id)
 
-    def required_columns(self):
+    @classmethod
+    def required_columns(cls):
         # returns all required (nullable=False) columns \
         # excluding primary key in a list
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
-            c.name for c in self.__table__.columns if not c.nullable and not
+            c.name for c in cls.__table__.columns if not c.nullable and not
             c.primary_key]
         return columns
 
-    def available_columns(self):
+    @classmethod
+    def available_columns(cls):
         # returns all available columns excluding primary key in a list
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
-            c.name for c in self.__table__.columns if not c.primary_key]
+            c.name for c in cls.__table__.columns if not c.primary_key]
         return columns
