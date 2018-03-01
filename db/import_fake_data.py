@@ -1,69 +1,121 @@
-#!/usr/bin/env python3
+# This needs to be run as python -m db.import_fake_data
+# from the project root with an activated venv
 import json
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from models import db, Customer, Facility, Device, Data
+import sys
+
+from run import app
+
+# Import database classes and SQLAlchamy instance
+from db.models import Customer, Facility, Device, \
+    Data, User, UserToFacility, Role, db
 
 
-engine = create_engine('postgresql://catalog:catalog@localhost:5432/acmonitor')
-# Class definitions connect to tables in db
-db.metadata.bind = engine
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
+def create_item(db_class, request_json):
+    # Creates a db entry with data from request_json,
+    # schema from columns and db_class
+
+    required_columns = db_class.required_columns()
+
+    try:
+        # TODO change to a list comprehension
+        for column in required_columns:
+            required_attribute = request_json.get(column)
+
+            if required_attribute is not None:
+                continue
+            elif required_attribute is None:
+                raise ValueError('A required attribute had a value of None')
+    except KeyError as e:
+        error_message = 'KeyError - reason %s was not found' % str(e)
+        print(error_message)
+    else:
+        new_item = db_class.from_dict(request_json)
+
+        with app.app_context():
+            db.session.add(new_item)
+
+            # TODO add a try catch for sqlalchemy errors
+            db.session.commit()
+
+    # TODO add a more descriptive message
+    # TODO add a 201 status code to request
+    return new_item
 
 
-def add_to_session(data):
+def stage_item(db_class, request_json):
+    # Creates a db entry with data from request_json, does not commit to db
+    # schema pulled from db_class
 
-    def facility_add(entry, customer):
-        for facility in customer["facility"]:
-            if "address" in facility:
-                entry.facility = Facility(
-                    address=facility["address"],
-                    customer=entry.customer
-                )
-                session.add(entry.facility)
-            else:
-                return 'Error: please add an address for each facility'
+    required_columns = db_class.required_columns()
 
-    def device_add(entry, customer):
-        for device in customer["device"]:
-            if "device_type" in device:
-                if "location_description" in device:
-                    if "address" in device:
-                        entry.device = Device(
-                            device_type=device["device_type"],
-                            location_description=device["location_description"],
-                            facility=entry.facility
-                        )
-                        session.add(entry.device)
+    try:
+        # TODO change to a list comprehension
+        for column in required_columns:
+            required_attribute = request_json.get(column)
+
+            if required_attribute is not None:
+                continue
+            elif required_attribute is None:
+                print(column)
+                raise ValueError('A required attribute had a value of None')
+    except KeyError as e:
+        error_message = 'KeyError - reason %s was not found' % str(e)
+        print(error_message)
+    else:
+        new_item = db_class.from_dict(request_json)
+
+    # TODO add a more descriptive message
+    # TODO add a 201 status code to request
+    return new_item
+
+
+def parse_data(data):
+
+    for customer in data['customers']:
+        create_item(Customer, customer)
+
+    for facility in data['facilities']:
+        create_item(Facility, facility)
+
+    for device in data['devices']:
+        create_item(Device, device)
+
+    for obj in data['sets']:
+
+        with app.app_context():
+            customer = stage_item(Customer, obj['customer'])
+            db.session.add(customer)
+
+            for facility in obj['facilities']:
+                new_facility = stage_item(Facility, facility)
+                db.session.add(new_facility)
+
+                new_facility.customer = customer
+
+                for device in obj['devices']:
+                    if device['address'] == new_facility.address:
+                        new_device = stage_item(Device, device)
+                        db.session.add(new_device)
+
+                        new_device.facility = new_facility
                     else:
-                        return "incomplete device"
-                else:
-                    return "incomplete device"
-            else:
-                return "incomplete device"
+                        continue
 
-    for customer in data:
-        # this creates an empty obj
-        entry = type('entry', (), {})()
-
-        if "customer" in customer:
-            if "name" in customer["customer"]:
-                entry.customer = Customer(name=customer["customer"]["name"])
-                session.add(entry.customer)
-
-                facility_add(entry, customer)
-                device_add(entry, customer)
-
-                session.commit()
-
-            else:
-                return 'Error: please add a customer name'
-        else:
-            return 'Error: please add a customer'
+            # TODO add a try catch for sqlalchemy errors
+            db.session.commit()
 
 
-# good explenation of with http://effbot.org/zone/python-with-statement.htm
-with open('fake_customer_data.JSON') as fake_data:
-    data = json.load(fake_data)
-    add_to_session(data)
+def load_data():
+    # script_path should be the path to catalog/db
+
+    path_to_json = 'db/fake_data.JSON'
+
+    # good explenation of with http://effbot.org/zone/python-with-statement.htm
+    with open(path_to_json) as fake_data:
+        data = json.load(fake_data)
+
+    return data
+
+
+if __name__ == '__main__':
+    parse_data(load_data())
