@@ -38,9 +38,8 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(id):
-    u = User.query.filter_by(id=id).first()
     # TODO investigate if im just creating duplicates here?
-    return User(u.email, u.oauth_provider)
+    return User.query.filter_by(id=id).first()
 
 
 '''
@@ -140,7 +139,7 @@ def gconnect():
 def get_items(db_class):
     # Retrieves up to the first 20 items of a db_class defined in models
 
-    item_list = db_class.query.limit(20).all()
+    item_list = db_class.query.limit(500).all()
     # Really a list of dictionaries but couldn't think of a better name
     item_dicts = []
 
@@ -201,6 +200,7 @@ def update_item(db_class, item, request_json):
 
 @app.route('/api/customers/', methods=['GET'])
 def get_customers():
+
     # GET a list of up to the first 20 customers
     customer_json = get_items(Customer)
 
@@ -515,6 +515,15 @@ def not_found(error):
 
     return make_response(
         jsonify({'error': 'You sent an unsupported media type'}), 415)
+
+
+@app.errorhandler(500)
+def not_found(error):
+    # Handle 500 errors so that they make more sense for the api
+    # This will not work properly when debug=true
+    # TODO make this error a bit more descriptive
+
+    return make_response(jsonify({'error': 'Internal server error'}), 500)
 
 
 @app.context_processor
