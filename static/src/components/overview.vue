@@ -165,8 +165,8 @@ export default {
       fetch('/api/devices/').then(function(response) {
         return response.json()
       }).then(function(deviceJSON) {
-        self.device.data = deviceJSON
-        self.device.loading = false
+        self.devices.data = deviceJSON
+        self.devices.loading = false
       })
     },
     fetchFacilities() {
