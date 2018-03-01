@@ -109,7 +109,7 @@ class Facility(db.Model):
     def from_dict(cls, d):
         # allows the class to be created from a dict (d)
 
-        allowed = cls.available_columns
+        allowed = cls.available_columns()
 
         dict_filter = {key: value for key,
                        value in d.items() if key in allowed}
@@ -167,7 +167,7 @@ class Device(db.Model):
     def from_dict(cls, d):
         # allows the class to be created from a dict (d)
 
-        cls.available_columns
+        allowed = cls.available_columns()
 
         dict_filter = {key: value for key,
                        value in d.items() if key in allowed}
