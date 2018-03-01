@@ -29,11 +29,15 @@
       "devices": [
         {
           "device_type": "FAKENEWS",
-          "location_description": "Harry's Room"
+          "hvac_description": "Harry's Room",
+          "hardware_id": 12345678,
+          "address": "2300 Greenhill Dr, Ste 100 Round Rock, Texas 78664 USA"
         },
         {
           "device_type": "FAKENEWS",
-          "location_description": "Potter's Room"
+          "hvac_description": "Potter's Room",
+          "hardware_id": 1234567,
+          "address": "2300 Greenhill Dr, Ste 100 Round Rock, Texas 78664 USA"
         }
       ]
     },
@@ -55,23 +59,33 @@
       "devices": [
         {
           "device_type": "FAKENEWS",
-          "location_description": "Harry's Room"
+          "hvac_description": "Harry's Room",
+          "hardware_id": 123456,
+          "address": "2150 E Palm Valley Blvd Ste 100, Round Rock, TX 78665"
         },
         {
           "device_type": "FAKENEWS",
-          "location_description": "Potter's Room"
+          "hvac_description": "Potter's Room",
+          "hardware_id": 12345,
+          "address": "2150 E Palm Valley Blvd Ste 100, Round Rock, TX 78665"
         },
         {
           "device_type": "FAKENEWS",
-          "location_description": "Harry's Room"
+          "hvac_description": "Harry's Room",
+          "hardware_id": 1234,
+          "address": "1468 E Whitestone Blvd #100, Cedar Park, TX 78613"
         },
         {
           "device_type": "FAKENEWS",
-          "location_description": "Potter's Room"
+          "hvac_description": "Potter's Room",
+          "hardware_id": 123,
+          "address": "1468 E Whitestone Blvd #100, Cedar Park, TX 78613"
         },
         {
           "device_type": "FAKENEWS",
-          "location_description": "Harry's Room"
+          "hvac_description": "Harry's Room",
+          "hardware_id": 12,
+          "address": "11521 Rr 620 N. E-1000, Austin, TX 78726"
         }
       ]
     }
