@@ -1,0 +1,79 @@
+{
+  "customers": [
+    {
+      "name": "Chandler Wilson"
+    }
+  ],
+  "devices": [
+    {
+      "hardware_id": 123456789,
+      "device_type": "orphaned",
+      "hvac_description": "Through the wardrobe"
+    }
+  ],
+  "facilities": [
+    {
+      "address": "2015 E Riverside Dr, Austin, TX 78741"
+    }
+  ],
+  "sets": [
+    {
+      "customer": {
+        "name": "Bowditch Navigation"
+      },
+      "facilities": [
+        {
+          "address": "2300 Greenhill Dr, Ste 100 Round Rock, Texas 78664 USA"
+        }
+      ],
+      "devices": [
+        {
+          "device_type": "FAKENEWS",
+          "location_description": "Harry's Room"
+        },
+        {
+          "device_type": "FAKENEWS",
+          "location_description": "Potter's Room"
+        }
+      ]
+    },
+    {
+      "customer": {
+        "name": "Torchy's Tacos"
+      },
+      "facilities": [
+        {
+          "address": "2150 E Palm Valley Blvd Ste 100, Round Rock, TX 78665"
+        },
+        {
+          "address": "1468 E Whitestone Blvd #100, Cedar Park, TX 78613"
+        },
+        {
+          "address": "11521 Rr 620 N. E-1000, Austin, TX 78726"
+        }
+      ],
+      "devices": [
+        {
+          "device_type": "FAKENEWS",
+          "location_description": "Harry's Room"
+        },
+        {
+          "device_type": "FAKENEWS",
+          "location_description": "Potter's Room"
+        },
+        {
+          "device_type": "FAKENEWS",
+          "location_description": "Harry's Room"
+        },
+        {
+          "device_type": "FAKENEWS",
+          "location_description": "Potter's Room"
+        },
+        {
+          "device_type": "FAKENEWS",
+          "location_description": "Harry's Room"
+        }
+      ]
+    }
+  ]
+}
