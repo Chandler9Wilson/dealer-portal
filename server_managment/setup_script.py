@@ -47,7 +47,7 @@ def create_dbs():
 
 
 def setup_venv(script_path):
-    # script_path should be the path to catalog/server_managment/
+    # script_path should be the path to catalog/server_managment
 
     # Changes the scripts working directory so relative paths work
     os.chdir(script_path)
@@ -66,7 +66,7 @@ def setup_venv(script_path):
 
 
 def setup_models(script_path):
-    # script_path should be the path to catalog/server_managment/
+    # script_path should be the path to catalog/server_managment
     # TODO add code so that setup.py and
     # based on user input import_fake_data.py are run automattically
     print('Please run ./setup.py in the venv from ./ ' +
