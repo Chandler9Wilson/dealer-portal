@@ -20,7 +20,7 @@
 
 
         <div v-if="customers.data">
-          <table class="table">
+          <table class="table is-hoverable">
             <thead>
               <tr>
                 <th>ID</th>
@@ -29,50 +29,8 @@
             </thead>
             <tbody>
               <tr v-for="customer in customers.data" :key="customer.id">
-                <td>{{ customer.id }}</td>
-                <td>{{ customer.name }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <div class="tile is-vertical is-parent">
-      <div class="tile is-child box">
-        <p class="title">Devices</p>
-
-        <div class="spinner" v-if="devices.loading">
-          <div class="rect1"></div>
-          <div class="rect2"></div>
-          <div class="rect3"></div>
-          <div class="rect4"></div>
-          <div class="rect5"></div>
-        </div>
-
-        <div v-if="devices.error">
-          <!-- TODO improve error display -->
-          {{ error }}
-        </div>
-
-        <div v-if="devices.data">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Hardware ID</th>
-                <th>Device Type</th>
-                <th>HVAC Description</th>
-                <th>Facility ID</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="device in devices.data" :key="device.id">
-                <td>{{ device.id }}</td>
-                <td>{{ device.hardware_id }}</td>
-                <td>{{ device.device_type }}</td>
-                <td>{{ device.hvac_description }}</td>
-                <td>{{ device.facility_id }}</td>
+                <td><router-link :to="{ name: 'customer', params: { id: customer.id }}">{{ customer.id }}</router-link></td>
+                <td><router-link :to="{ name: 'customer', params: { id: customer.id }}">{{ customer.name }}</router-link></td>
               </tr>
             </tbody>
           </table>
@@ -98,17 +56,61 @@
         </div>
 
         <div v-if="facilities.data">
-          <table class="table">
+          <table class="table is-hoverable">
             <thead>
               <tr>
                 <th>ID</th>
                 <th>Address</th>
+                <th>Customer ID</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="facility in facilities.data" :key="facility.id">
-                <td>{{ facility.id }}</td>
-                <td>{{ facility.address }}</td>
+                <td><router-link :to="{ name: 'facility', params: { id: facility.id }}">{{ facility.id }}</router-link></td>
+                <td><router-link :to="{ name: 'facility', params: { id: facility.id }}">{{ facility.address }}</router-link></td>
+                <td><router-link :to="{ name: 'facility', params: { id: facility.id }}">{{ facility.customer_id }}</router-link></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="tile is-vertical is-parent">
+      <div class="tile is-child box">
+        <p class="title">Devices</p>
+
+        <div class="spinner" v-if="devices.loading">
+          <div class="rect1"></div>
+          <div class="rect2"></div>
+          <div class="rect3"></div>
+          <div class="rect4"></div>
+          <div class="rect5"></div>
+        </div>
+
+        <div v-if="devices.error">
+          <!-- TODO improve error display -->
+          {{ error }}
+        </div>
+
+        <div v-if="devices.data">
+          <table class="table is-hoverable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Hardware ID</th>
+                <th>Device Type</th>
+                <th>HVAC Description</th>
+                <th>Facility ID</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="device in devices.data" :key="device.id">
+                <td><router-link :to="{ name: 'device', params: { id: device.id }}">{{ device.id }}</router-link></td>
+                <td><router-link :to="{ name: 'device', params: { id: device.id }}">{{ device.hardware_id }}</router-link></td>
+                <td><router-link :to="{ name: 'device', params: { id: device.id }}">{{ device.device_type }}</router-link></td>
+                <td><router-link :to="{ name: 'device', params: { id: device.id }}">{{ device.hvac_description }}</router-link></td>
+                <td><router-link :to="{ name: 'device', params: { id: device.id }}">{{ device.facility_id }}</router-link></td>
               </tr>
             </tbody>
           </table>
