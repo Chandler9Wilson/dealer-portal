@@ -1,7 +1,7 @@
 <template>
   <!-- TODO split customers, devices etc. into seperate components -->
-  <div class="tile is-ancestor">
-    <div class="tile is-vertical is-parent">
+  <div class="tile is-ancestor box">
+    <div class="tile is-vertical is-parent is-3">
       <div class="tile is-child box">
         <p class="title">Customers</p>
 
