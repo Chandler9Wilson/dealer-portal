@@ -3,6 +3,7 @@ client_secrets.json
 # Exclude python virtual environment folder (just recreate on new machines)
 /env
 # require a rebuild when on a new machine
+docs/build
 static/dist
 *.pyc
 static/node_modules
