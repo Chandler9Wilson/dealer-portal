@@ -6,7 +6,17 @@
 
 ## Getting started
 
-1. Run `./server_managment/setup_script.py` respond `y` when prompted if this is your first time.
+1. Run `./server_managment/setup_script.py` respond yes when prompted if this is your first time.
+2. `$ source env/bin/activate`
+3. `$ pip install -r requirements.txt`
+
+## Viewing the Documentation
+
+1. Activate your env with `source env/bin/activate`
+2. `cd docs`
+3. `make html`
+4. `python -m http.server`
+5. Navigate to build/html
 
 ## TODO
 
