@@ -137,8 +137,7 @@ def gconnect():
 
 
 def get_items(db_class):
-    # Retrieves up to the first 20 items of a db_class defined in models
-
+    """Retrieves up to the first 500 items of a db_class defined in models"""
     item_list = db_class.query.limit(500).all()
     # Really a list of dictionaries but couldn't think of a better name
     item_dicts = []
@@ -146,7 +145,25 @@ def get_items(db_class):
     for item in item_list:
         item_dicts.append(db_class.as_dict(item))
 
-    # Might want to move jsonify to the view function?
+    # TODO Might want to move jsonify to the view function?
+    return jsonify(item_dicts)
+
+
+# TODO this needs better names
+def get_items_related(owner, owned_name, owned_class, obj):
+    # Retrieves up to the first 500 items of db_class \
+    # with a relationship with owned name and
+    # returns as a dictionary or object list depending on obj
+
+    # TODO evaluate if this needs a limit or not
+    item_list = getattr(owner, owned_name)
+    # Really a list of dictionaries but couldn't think of a better name
+    item_dicts = []
+
+    for item in item_list:
+        item_dicts.append(owned_class.as_dict(item))
+
+    # TODO Might want to move jsonify to the view function?
     return jsonify(item_dicts)
 
 
@@ -229,7 +246,7 @@ def create_customer():
         raise
 
 
-@app.route('/api/customers/<int:customer_id>', methods=['GET'])
+@app.route('/api/customers/<int:customer_id>/', methods=['GET'])
 def get_customer(customer_id):
     # Get a specific customer by id
 
@@ -241,7 +258,7 @@ def get_customer(customer_id):
         return jsonify(Customer.as_dict(customer))
 
 
-@app.route('/api/customers/<int:customer_id>', methods=['PUT'])
+@app.route('/api/customers/<int:customer_id>/', methods=['PUT'])
 def update_customer(customer_id):
     # Update a customer by id
     # Currently does not accept non existant customers (no new)
@@ -269,7 +286,7 @@ def update_customer(customer_id):
         raise
 
 
-@app.route('/api/customers/<int:customer_id>', methods=['DELETE'])
+@app.route('/api/customers/<int:customer_id>/', methods=['DELETE'])
 def delete_customer(customer_id):
     # Delete a specific customer by id
 
@@ -284,6 +301,29 @@ def delete_customer(customer_id):
         db.session.commit()
 
         return 'Deleted the customer'
+
+
+@app.route('/api/customers/<int:customer_id>/facilities/', methods=['GET'])
+def facilities_of_customer(customer_id):
+    # Get facilities with a foreign key of customer_id
+
+    customer = Customer.query.filter_by(id=customer_id).first()
+
+    facilities_list = get_items_of(customer, 'facilities', Facility)
+
+    return facilities_list
+
+
+@app.route('/api/customers/<int:customer_id>/facilities/devices',
+           methods=['GET'])
+def devices_of_customers_facility(customer_id):
+    # Get facilities with a foreign key of customer_id
+
+    customer = Customer.query.filter_by(id=customer_id).first()
+
+    facilities_list = get_items_of(customer, 'facilities', Facility)
+
+    return facilities_list
 
 
 @app.route('/api/facilities/', methods=['GET'])
@@ -318,7 +358,7 @@ def create_facility():
         raise
 
 
-@app.route('/api/facilities/<int:facility_id>', methods=['GET'])
+@app.route('/api/facilities/<int:facility_id>/', methods=['GET'])
 def get_facility(facility_id):
     # Get a specific facility by id
 
@@ -330,7 +370,7 @@ def get_facility(facility_id):
         return jsonify(Facility.as_dict(facility))
 
 
-@app.route('/api/facilities/<int:facility_id>', methods=['PUT'])
+@app.route('/api/facilities/<int:facility_id>/', methods=['PUT'])
 def update_facility(facility_id):
     # Update a facility by id
     # Currently does not accept non existant facilities (no new)
@@ -358,7 +398,7 @@ def update_facility(facility_id):
         raise
 
 
-@app.route('/api/facilities/<int:facility_id>', methods=['DELETE'])
+@app.route('/api/facilities/<int:facility_id>/', methods=['DELETE'])
 def delete_facility(facility_id):
     # Delete a specific facility by id
 
@@ -407,7 +447,7 @@ def create_device():
         raise
 
 
-@app.route('/api/devices/<int:device_id>', methods=['GET'])
+@app.route('/api/devices/<int:device_id>/', methods=['GET'])
 def get_device(device_id):
     # Get a specific device by id
 
@@ -419,7 +459,7 @@ def get_device(device_id):
         return jsonify(Device.as_dict(device))
 
 
-@app.route('/api/devices/<int:device_id>', methods=['PUT'])
+@app.route('/api/devices/<int:device_id>/', methods=['PUT'])
 def update_device(device_id):
     # Update a device by id
     # Currently does not accept non existant devices (no new)
@@ -447,7 +487,7 @@ def update_device(device_id):
         raise
 
 
-@app.route('/api/devices/<int:device_id>', methods=['DELETE'])
+@app.route('/api/devices/<int:device_id>/', methods=['DELETE'])
 def delete_device(device_id):
     # Delete a specific device by id
 
@@ -551,4 +591,4 @@ if __name__ == '__main__':
     # TODO change secret_key
     app.secret_key = 'super secret key'
     app.debug = True
-    app.run(host='0.0.0.0', port=8000, threaded=True)
+    app.run(host='0.0.0.0', port=8080, threaded=True)
