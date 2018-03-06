@@ -69,6 +69,8 @@ def setup_models(script_path):
     # script_path should be the path to catalog/server_managment
     # TODO add code so that setup.py and
     # based on user input import_fake_data.py are run automattically
+    print('-' * 30)
+    print('-' * 30)
     print('Please run ./setup.py in the venv from ./ ' +
           'with `$ python -m db.setup` to setup db.models && if you' +
           'need fake data run ./db/import_fake_data.py')
