@@ -1,5 +1,11 @@
 The Dealer Portal API reference
-=============================
+===============================
 
-.. automodule:: run
+.. automodule:: dealer-portal
+  :members:
+
+The "run" module
+----------------
+
+.. automodule:: dealer-portal.run
   :members:
