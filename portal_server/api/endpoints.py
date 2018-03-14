@@ -21,7 +21,7 @@ def get_items(db_class):
 @api.route('/customers/', methods=['GET'])
 @api.route('/customers/<int:customer_id>/', methods=['GET'])
 def get_customers(customer_id=None):
-    """Returns customer or customers"""
+    """Returns a customer or customers"""
     if customer_id is None:
         customer_json = get_items(Customer)
     else:
@@ -96,7 +96,7 @@ def devices_of_facilities_of_customer(customer_id):
 @api.route('/facilities/', methods=['GET'])
 @api.route('/facilities/<int:facility_id>/', methods=['GET'])
 def get_facilities(facility_id=None):
-
+    """Returns a facility or facilities"""
     if facility_id is None:
         facility_json = get_items(Facility)
     else:
@@ -108,6 +108,46 @@ def get_facilities(facility_id=None):
             facility_json = jsonify(Facility.as_dict(facility))
 
     return facility_json
+
+
+@api.route('/facilities/<int:facility_id>/devices/', methods=['GET'])
+def devices_of_facility(facility_id):
+    """Returns devices with a relationship to facility_id"""
+    facility = Facility.query.filter_by(id=facility_id).first()
+
+    if facility is None:
+        return abort(404)
+    else:
+        device_list = facility.devices
+        device_dicts = []
+
+        for device in device_list:
+            device_dicts.append(device.as_dict())
+
+    return jsonify(device_dicts)
+
+
+@api.route('/facilities/<int:facility_id>/devices/data/', methods=['GET'])
+def data_of_facility(facility_id):
+    """Returns devices with nested data owned by facility_id"""
+    facility = Facility.query.filter_by(id=facility_id).first()
+
+    if facility is None:
+        return abort(404)
+    else:
+        device_list = facility.devices
+        nested_dicts = []
+
+        for index, device in enumerate(device_list):
+            nested_dicts.append(device.as_dict())
+            # Adds an empty list to current facility
+            nested_dicts[index]['data'] = []
+            data = nested_dicts[index]['data']
+
+            for data in device.data:
+                data.append(data.as_dict())
+
+    return jsonify(nested_dicts)
 
 
 @api.route('/devices/', methods=['GET'])
