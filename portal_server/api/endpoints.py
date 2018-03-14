@@ -1,4 +1,6 @@
-from flask import Blueprint
+from flask import Blueprint, jsonify, abort, make_response
+
+from portal_server.db.models import Customer, Facility, Device, Data
 
 api = Blueprint('api', __name__)
 
@@ -20,8 +22,15 @@ def get_items(db_class):
 @api.route('/customers/<int:customer_id>/', methods=['GET'])
 def get_customers(customer_id=None):
 
-    # GET a list of up to the first 20 customers
-    customer_json = get_items(Customer)
+    if customer_id is None:
+        customer_json = get_items(Customer)
+    else:
+        customer = Customer.query.filter_by(id=customer_id).first()
+
+        if customer is None:
+            return abort(404)
+        else:
+            customer_json = jsonify(Customer.as_dict(customer))
 
     return customer_json
 
