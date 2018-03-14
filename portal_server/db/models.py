@@ -133,10 +133,10 @@ class Device(db.Model):
     facility = db.relationship('Facility', back_populates='devices')
 
     def __repr__(self):
-        return "<User(id='%s', hardware_id='%s', device_type='%s'," + \
-            "hvac_description='%s', facility_id='%s')>" % (
-                self.id, self.hardware_id, self.device_type,
-                self.hvac_description, self.facility_id)
+        return """<User(id='%s', hardware_id='%s', device_type='%s',
+            hvac_description='%s', facility_id='%s')>""" % (
+            self.id, self.hardware_id, self.device_type,
+            self.hvac_description, self.facility_id)
 
     # CRED https://stackoverflow.com/a/11884806/6879253
     def as_dict(self):
@@ -196,10 +196,11 @@ class Data(db.Model):
     device = db.relationship('Device')
 
     def __repr__(self):
-        return "<User(id='%s', timestamp='%s', t1='%s', t2='%s', t3='%s', " + \
-            "power='%s', operation='%s', fan_on='%s', device_id='%s')>" % (
-                self.id, self.timestamp, self.t1, self.t2, self.t3, self.power,
-                self.operation, self.fan_on, self.device_id)
+        return """<User(id='%s', timestamp='%s', t1='%s', t2='%s', t3='%s',
+            power='%s', operation='%s', fan_on='%s',
+            device_id='%s')>""" % (
+            self.id, self.timestamp, self.t1, self.t2, self.t3, self.power,
+            self.operation, self.fan_on, self.device_id)
 
     # CRED https://stackoverflow.com/a/11884806/6879253
     def as_dict(self):
@@ -260,10 +261,10 @@ class User(db.Model):
         self.is_active = active
 
     def __repr__(self):
-        return "<User(id='%s', name='%s', email='%s', profile_pic='%s', " + \
-            "oauth_provider='%s')>" % (
-                self.id, self.name, self.email, self.profile_pic,
-                self.oauth_provider)
+        return """<User(id='%s', name='%s', email='%s', profile_pic='%s',
+            oauth_provider='%s')>""" % (
+            self.id, self.name, self.email, self.profile_pic,
+            self.oauth_provider)
 
     def is_authenticated(self):
         return True
