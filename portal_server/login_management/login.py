@@ -1,56 +1,29 @@
+import json
+
 # flask-login used for login management and persistence
-from flask_login import LoginManager, login_user, login_required, current_user
+from flask_login import login_required, login_user
 
 # used for google oauth verification of tokens
 from google.oauth2 import id_token
 from google.auth.transport import requests as googleRequests
 
-from flask import Blueprint
+from flask import Blueprint, render_template, request
 
-login_bp = Blueprint('login', __name__, static_folder='static',
+# Import database classes and SQLAlchamy instance
+from portal_server.db.models import User
+
+login_bp = Blueprint('login_bp', __name__,
+                     static_folder='login_static',
                      template_folder='templates')
 
-# Flask-Login class
-login_manager = LoginManager()
-# login_manager.login_view = 'login'
-login_manager.init_app(login_bp)
 
-
-@login_manager.user_loader
-def load_user(id):
-    # TODO investigate if im just creating duplicates here?
-    return User.query.filter_by(id=id).first()
-
-
-'''
-@login_manager.unauthorized_handler
-def handler_needs_login():
-    flash("You have to be logged in to access this page.")
-    return redirect(url_for('account.login', next=request.endpoint))
-
-
-def redirect_dest(fallback):
-    dest = request.args.get('next')
-    try:
-        dest_url = url_for(dest)
-    except:
-        return redirect(fallback)
-    return redirect(dest_url) '''
-
-
-@app.route('/login/')
+@login_bp.route('/login/')
 def login():
     # flask_login.logout_user()
     return render_template('login.html')
 
 
-@app.route('/home/')
-@login_required
-def home():
-    return render_template('directory.html')
-
-
-@app.route('/debug/')
+@login_bp.route('/debug/')
 def debug():
 
     return infoMessage
@@ -59,7 +32,7 @@ def debug():
 # Begin POST only views mainly used for login
 
 
-@app.route('/gconnect/', methods=['POST'])
+@login_bp.route('/gconnect/', methods=['POST'])
 def gconnect():
     # Handles google login requests
     CLIENT_ID = '349469004723-j9csi1hlhb1s0abuap24lo50mgvbkrhh' + \
