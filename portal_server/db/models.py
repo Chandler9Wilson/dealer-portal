@@ -130,6 +130,7 @@ class Device(db.Model):
 
     # Begin sqlalchemy specific code (wont be in the db)
 
+    data = db.relationship('Data', back_populates='device')
     facility = db.relationship('Facility', back_populates='devices')
 
     def __repr__(self):
@@ -193,7 +194,7 @@ class Data(db.Model):
 
     # Begin sqlalchemy specific code (wont be in the db)
 
-    device = db.relationship('Device')
+    device = db.relationship('Device', back_populates='data')
 
     def __repr__(self):
         return """<User(id='%s', timestamp='%s', t1='%s', t2='%s', t3='%s',
