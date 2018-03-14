@@ -21,7 +21,7 @@ def get_items(db_class):
 @api.route('/customers/', methods=['GET'])
 @api.route('/customers/<int:customer_id>/', methods=['GET'])
 def get_customers(customer_id=None):
-
+    """Returns customer or customers"""
     if customer_id is None:
         customer_json = get_items(Customer)
     else:
@@ -36,10 +36,95 @@ def get_customers(customer_id=None):
 
 
 @api.route('/customers/<int:customer_id>/facilities/', methods=['GET'])
-@api.route('/customers/<int:customer_id>/facilities/<int:facility_id>/',
-           methods=['GET'])
-def get_nested():
-    return None
+def facilities_of_customer(customer_id):
+    """Returns facilities with a relationship to customer_id"""
+    customer = Customer.query.filter_by(id=customer_id).first()
+
+    if customer is None:
+        return abort(404)
+    else:
+        facility_list = customer.facilities
+        facility_dicts = []
+
+        for facility in facility_list:
+            facility_dicts.append(facility.as_dict())
+        return jsonify(facility_dicts)
+
+
+@api.route('/customers/<int:customer_id>/devices/', methods=['GET'])
+def devices_of_customer(customer_id):
+    """Returns devices with a relationship to customer_id"""
+    customer = Customer.query.filter_by(id=customer_id).first()
+
+    if customer is None:
+        return abort(404)
+    else:
+        facility_list = customer.facilities
+        device_dicts = []
+
+        for facility in facility_list:
+            for device in facility.devices:
+                device_dicts.append(device.as_dict())
+                print(device_dicts)
+    return jsonify(device_dicts)
+
+
+@api.route('/customers/<int:customer_id>/facilities/devices/', methods=['GET'])
+# TODO come up with a less verbose name
+def devices_of_facilities_of_customer(customer_id):
+    """Returns facilities with nested devices owned by customer_id"""
+    customer = Customer.query.filter_by(id=customer_id).first()
+
+    if customer is None:
+        return abort(404)
+    else:
+        # TODO look into adding this logic to a method on Facility
+        facility_list = customer.facilities
+        nested_dicts = []
+
+        for index, facility in enumerate(facility_list):
+            nested_dicts.append(facility.as_dict())
+            # Adds an empty list to current facility
+            nested_dicts[index]['devices'] = []
+            devices = nested_dicts[index]['devices']
+
+            for device in facility.devices:
+                devices.append(device.as_dict())
+    return jsonify(nested_dicts)
+
+
+@api.route('/facilities/', methods=['GET'])
+@api.route('/facilities/<int:facility_id>/', methods=['GET'])
+def get_facilities(facility_id=None):
+
+    if facility_id is None:
+        facility_json = get_items(Facility)
+    else:
+        facility = Facility.query.filter_by(id=facility_id).first()
+
+        if facility is None:
+            return abort(404)
+        else:
+            facility_json = jsonify(Facility.as_dict(facility))
+
+    return facility_json
+
+
+@api.route('/devices/', methods=['GET'])
+@api.route('/devices/<int:device_id>/', methods=['GET'])
+def get_devices(device_id=None):
+
+    if device_id is None:
+        device_json = get_items(Device)
+    else:
+        device = Device.query.filter_by(id=device_id).first()
+
+        if device is None:
+            return abort(404)
+        else:
+            device_json = jsonify(Device.as_dict(device))
+
+    return device_json
 
 
 # TODO custom messages https://stackoverflow.com/a/21301229/6879253
