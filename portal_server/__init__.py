@@ -1,34 +1,51 @@
 import os
 
-from flask import Flask
+from flask import Flask, url_for
 
-# TODO eval if this needs to be here
+# flask-login used for login management and persistence
+from flask_login import LoginManager
+
 # Import database classes and SQLAlchamy instance
-from portal_server.db.models import db
+from portal_server.db.models import db, User
 
+# Blueprint imports
 from portal_server.api.endpoints import api
+from portal_server.login_management.login import login_bp
+from portal_server.directory.home import directory
 
+# Flask config
 app = Flask(__name__)
-app.register_blueprint(api, url_prefix='/api')
-
 # TODO make config options more succinct
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://catalog:catalog@' + \
     'localhost:5432/acmonitor'
 app.config['SQLALCHEMY_ECHO'] = True
+app.secret_key = 'super secret key'
 
+# Flask-Login class
+login_manager = LoginManager()
+login_manager.login_view = 'login_bp.login'
+login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.filter_by(id=id).first()
+
+
+# Register blueprints
+app.register_blueprint(api, url_prefix='/api')
+app.register_blueprint(directory, url_prefix='/home')
+app.register_blueprint(login_bp)
+
+# Starts up flask-sqlalchemy
 db.init_app(app)
-
-# TODO this needs a better name
-# Begin flask modifications
 
 
 @app.context_processor
 # TODO remove before deployment
 def override_url_for():
-    # overides static file caching
-    """
-    Generate a new token on every request to prevent the browser from
+    """Generate a new token on every request to prevent the browser from
     caching static files.
     """
     return dict(url_for=dated_url_for)
