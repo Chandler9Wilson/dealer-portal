@@ -47,12 +47,15 @@
 ## TO READ
 
 * [things which arent magic flask](https://ains.co/blog/things-which-arent-magic-flask-part-1.html)
+* [Best Practices for function arguments](http://www.informit.com/articles/article.aspx?p=2314818)
 * [decorators documentation](https://docs.python.org/3/reference/compound_stmts.html#function-definitions)
 * [how does the property decorator work?](https://stackoverflow.com/questions/17330160/how-does-the-property-decorator-work)
 * [how to make a chain of function decorators?](https://stackoverflow.com/a/1594484/6879253)
 
 ## Resources
 
+* Sphinx [tutorial](https://media.readthedocs.org/pdf/brandons-sphinx-tutorial/latest/brandons-sphinx-tutorial.pdf) extremely helpful
+* flask [Blueprints](https://books.google.com/books/about/Flask_Blueprints.html?id=SfSoCwAAQBAJ&printsec=frontcover&source=kp_read_button#v=onepage&q&f=true)
 * python subprocess [explanation](http://www.codecalamity.com/run-subprocess-run/)
 * [REST api](http://www.restapitutorial.com)
 * [python import confustion](http://effbot.org/zone/import-confusion.htm)
