@@ -221,7 +221,7 @@ def data_of_facility(facility_id):
 
 @app.route('/devices/', methods=['POST'])
 def create_device():
-    # Create a new device
+    """Create a new device"""
 
     if request.get_json() is None:
         # This is triggered if the mimetype is not application/json
@@ -272,7 +272,7 @@ def data_of_device(device_id):
 
 @app.route('/data/', methods=['POST'])
 def new_data():
-    # Takes a data json and adds to db
+    """Takes a data json and adds to db"""
 
     if request.get_json() is None:
         # This is triggered if the mimetype is not application/json
