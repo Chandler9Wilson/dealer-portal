@@ -80,6 +80,7 @@ def devices_of_facilities_of_customer(customer_id):
     else:
         # TODO look into adding this logic to a method on Facility
         facility_list = customer.facilities
+        # TODO come up with a better name
         nested_dicts = []
 
         for index, facility in enumerate(facility_list):
@@ -136,6 +137,7 @@ def data_of_facility(facility_id):
         return abort(404)
     else:
         device_list = facility.devices
+        # TODO come up with a better name
         nested_dicts = []
 
         for index, device in enumerate(device_list):
@@ -165,6 +167,23 @@ def get_devices(device_id=None):
             device_json = jsonify(Device.as_dict(device))
 
     return device_json
+
+
+@api.route('/devices/<int:device_id>/data/', methods=['GET'])
+def data_of_device(device_id):
+    """Returns devices with a relationship to device_id"""
+    device = Device.query.filter_by(id=device_id).first()
+
+    if device is None:
+        return abort(404)
+    else:
+        data_list = device.data
+        data_dicts = []
+
+        for data in data_list:
+            data_dicts.append(data.as_dict())
+
+    return jsonify(data_dicts)
 
 
 # TODO custom messages https://stackoverflow.com/a/21301229/6879253
