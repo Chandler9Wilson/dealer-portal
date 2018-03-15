@@ -1,6 +1,6 @@
-from flask import Blueprint, jsonify, abort, make_response
+from flask import Blueprint, jsonify, abort, make_response, request
 
-from portal_server.db.models import Customer, Facility, Device, Data
+from portal_server.db.models import Customer, Facility, Device, Data, db
 
 api = Blueprint('api', __name__)
 
@@ -49,6 +49,23 @@ def create_item(db_class, request_json):
     # TODO add a more descriptive message
     # TODO add a 201 status code to request
     return new_item
+
+
+@api.route('/customers/', methods=['POST'])
+def create_customer():
+    """Create a new customer"""
+
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_customer = request.get_json()
+
+    # create_item() handles class creation and db commit
+    instance = create_item(Customer, raw_customer)
+
+    return jsonify(instance.as_dict())
 
 
 @api.route('/customers/', methods=['GET'])
@@ -127,6 +144,23 @@ def devices_of_facilities_of_customer(customer_id):
     return jsonify(nested_dicts)
 
 
+@api.route('/facilities/', methods=['POST'])
+def create_facility():
+    """Create a new facility"""
+
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_facility = request.get_json()
+
+    # create_item() handles class creation and db commit
+    instance = create_item(Facility, raw_facility)
+
+    return jsonify(instance.as_dict())
+
+
 @api.route('/facilities/', methods=['GET'])
 @api.route('/facilities/<int:facility_id>/', methods=['GET'])
 def get_facilities(facility_id=None):
@@ -185,6 +219,23 @@ def data_of_facility(facility_id):
     return jsonify(nested_dicts)
 
 
+@app.route('/devices/', methods=['POST'])
+def create_device():
+    # Create a new device
+
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_device = request.get_json()
+
+    # create_item() handles class creation and db commit
+    instance = create_item(Device, raw_device)
+
+    return jsonify(instance.as_dict())
+
+
 @api.route('/devices/', methods=['GET'])
 @api.route('/devices/<int:device_id>/', methods=['GET'])
 def get_devices(device_id=None):
@@ -217,6 +268,23 @@ def data_of_device(device_id):
             data_dicts.append(data.as_dict())
 
     return jsonify(data_dicts)
+
+
+@app.route('/data/', methods=['POST'])
+def new_data():
+    # Takes a data json and adds to db
+
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_data = request.get_json()
+
+    # create_item() handles class creation and db commit
+    instance = create_item(Data, raw_data)
+
+    return jsonify(instance.as_dict())
 
 
 # TODO custom messages https://stackoverflow.com/a/21301229/6879253
