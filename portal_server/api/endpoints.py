@@ -19,9 +19,10 @@ def get_items(db_class):
 
 
 def create_item(db_class, request_json):
-    # Creates a db entry with data from request_json,
-    # schema from columns and db_class
+    """Creates a db entry
 
+    with data from request_json,
+    schema from columns and db_class"""
     required_columns = db_class.required_columns()
 
     try:
@@ -51,10 +52,23 @@ def create_item(db_class, request_json):
     return new_item
 
 
+def update_item(db_class, item, request_json):
+    """loop through an item and update any valid changes"""
+    for attribute, value in request_json.items():
+        if attribute in db_class.required_columns() and value is not None:
+            setattr(item, attribute, value)
+        elif attribute in db_class.available_columns():
+            setattr(item, attribute, value)
+
+    # TODO add a try catch for sqlalchemy errors
+    db.session.commit()
+
+    return item
+
+
 @api.route('/customers/', methods=['POST'])
 def create_customer():
     """Create a new customer"""
-
     if request.get_json() is None:
         # This is triggered if the mimetype is not application/json
         return abort(415)
@@ -65,7 +79,46 @@ def create_customer():
     # create_item() handles class creation and db commit
     instance = create_item(Customer, raw_customer)
 
-    return jsonify(instance.as_dict())
+    return make_response(jsonify(instance.as_dict()), 201)
+
+
+@api.route('/customers/<int:customer_id>/', methods=['PUT'])
+def update_customer(customer_id):
+    """Update a customer
+
+    Currently does not accept non existant customers (no new)"""
+    customer = Customer.query.filter_by(id=customer_id).first()
+
+    if customer is None:
+        return abort(404)
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_update = request.get_json()
+
+    updated_customer = update_item(Customer, customer, raw_update)
+
+    return make_response(jsonify(updated_customer.as_dict()), 200)
+
+
+@api.route('/customers/<int:customer_id>/', methods=['DELETE'])
+def delete_customer(customer_id):
+    """Delete a specific customer by id"""
+
+    customer = Customer.query.filter_by(id=customer_id).first()
+
+    if customer is None:
+        return abort(404)
+    else:
+        db.session.delete(customer)
+
+        # TODO add a try catch for sqlalchemy errors
+        db.session.commit()
+
+        return make_response(None, 204)
 
 
 @api.route('/customers/', methods=['GET'])
@@ -147,7 +200,6 @@ def devices_of_facilities_of_customer(customer_id):
 @api.route('/facilities/', methods=['POST'])
 def create_facility():
     """Create a new facility"""
-
     if request.get_json() is None:
         # This is triggered if the mimetype is not application/json
         return abort(415)
@@ -158,7 +210,45 @@ def create_facility():
     # create_item() handles class creation and db commit
     instance = create_item(Facility, raw_facility)
 
-    return jsonify(instance.as_dict())
+    return make_response(jsonify(instance.as_dict()), 201)
+
+
+@api.route('/facilities/<int:facility_id>/', methods=['PUT'])
+def update_facility(facility_id):
+    """Update a facility by id
+
+    Currently does not accept non existant facilities (no new)"""
+    facility = Facility.query.filter_by(id=facility_id).first()
+
+    if facility is None:
+        return abort(404)
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_update = request.get_json()
+
+    updated_facility = update_item(Facility, facility, raw_update)
+
+    return make_response(jsonify(updated_facility.as_dict()), 200)
+
+
+@api.route('/facilities/<int:facility_id>/', methods=['DELETE'])
+def delete_facility(facility_id):
+    """Delete a specific facility by id"""
+    facility = Facility.query.filter_by(id=facility_id).first()
+
+    if facility is None:
+        return abort(404)
+    else:
+        db.session.delete(facility)
+
+        # TODO add a try catch for sqlalchemy errors
+        db.session.commit()
+
+        return make_response(None, 204)
 
 
 @api.route('/facilities/', methods=['GET'])
@@ -219,10 +309,9 @@ def data_of_facility(facility_id):
     return jsonify(nested_dicts)
 
 
-@app.route('/devices/', methods=['POST'])
+@api.route('/devices/', methods=['POST'])
 def create_device():
     """Create a new device"""
-
     if request.get_json() is None:
         # This is triggered if the mimetype is not application/json
         return abort(415)
@@ -233,7 +322,45 @@ def create_device():
     # create_item() handles class creation and db commit
     instance = create_item(Device, raw_device)
 
-    return jsonify(instance.as_dict())
+    return make_response(jsonify(instance.as_dict()), 201)
+
+
+@api.route('/devices/<int:device_id>/', methods=['PUT'])
+def update_device(device_id):
+    """Update a device by id
+
+    Currently does not accept non existant devices (no new)"""
+    device = Device.query.filter_by(id=device_id).first()
+
+    if device is None:
+        return abort(404)
+    if request.get_json() is None:
+        # This is triggered if the mimetype is not application/json
+        return abort(415)
+
+    # If get_json() decoding fails it will call \
+    # http://flask.pocoo.org/docs/0.12/api/#flask.Request.on_json_loading_failed
+    raw_update = request.get_json()
+
+    updated_device = update_item(Device, device, raw_update)
+
+    return make_response(jsonify(updated_device.as_dict()), 200)
+
+
+@api.route('/devices/<int:device_id>/', methods=['DELETE'])
+def delete_device(device_id):
+    """Delete a specific device by id"""
+    device = Device.query.filter_by(id=device_id).first()
+
+    if device is None:
+        return abort(404)
+    else:
+        db.session.delete(device)
+
+        # TODO add a try catch for sqlalchemy errors
+        db.session.commit()
+
+        return make_response(None, 204)
 
 
 @api.route('/devices/', methods=['GET'])
@@ -270,10 +397,9 @@ def data_of_device(device_id):
     return jsonify(data_dicts)
 
 
-@app.route('/data/', methods=['POST'])
+@api.route('/data/', methods=['POST'])
 def new_data():
     """Takes a data json and adds to db"""
-
     if request.get_json() is None:
         # This is triggered if the mimetype is not application/json
         return abort(415)
@@ -284,7 +410,7 @@ def new_data():
     # create_item() handles class creation and db commit
     instance = create_item(Data, raw_data)
 
-    return jsonify(instance.as_dict())
+    return make_response(jsonify(instance.as_dict()), 201)
 
 
 # TODO custom messages https://stackoverflow.com/a/21301229/6879253
