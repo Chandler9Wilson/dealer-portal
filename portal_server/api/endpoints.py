@@ -18,6 +18,39 @@ def get_items(db_class):
     return jsonify(item_dicts)
 
 
+def create_item(db_class, request_json):
+    # Creates a db entry with data from request_json,
+    # schema from columns and db_class
+
+    required_columns = db_class.required_columns()
+
+    try:
+        # TODO change to a list comprehension
+        for column in required_columns:
+            required_attribute = request_json.get(column)
+
+            if required_attribute is not None:
+                continue
+            elif required_attribute is None:
+                raise ValueError('A required attribute had a value of None')
+    except KeyError as e:
+        error_message = 'KeyError - reason %s was not found' % str(e)
+        return jsonify(error_message)
+    except:
+        abort(400)
+        raise
+    else:
+        new_item = db_class.from_dict(request_json)
+        db.session.add(new_item)
+
+        # TODO add a try catch for sqlalchemy errors
+        db.session.commit()
+
+    # TODO add a more descriptive message
+    # TODO add a 201 status code to request
+    return new_item
+
+
 @api.route('/customers/', methods=['GET'])
 @api.route('/customers/<int:customer_id>/', methods=['GET'])
 def get_customers(customer_id=None):
@@ -190,7 +223,7 @@ def data_of_device(device_id):
 
 
 @api.errorhandler(400)
-def not_found(error):
+def failed_decode(error):
     # Handle 400 errors so that they make more sense for the api
     # TODO make this error a bit more descriptive
 
@@ -206,7 +239,7 @@ def not_found(error):
 
 
 @api.errorhandler(415)
-def not_found(error):
+def unsupported(error):
     # Handle 415 errors so that they make more sense for the api
     # TODO make this error a bit more descriptive
 
@@ -215,7 +248,7 @@ def not_found(error):
 
 
 @api.errorhandler(500)
-def not_found(error):
+def internal_error(error):
     # Handle 500 errors so that they make more sense for the api
     # This will not work properly when debug=true
     # TODO make this error a bit more descriptive
