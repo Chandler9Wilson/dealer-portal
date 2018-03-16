@@ -116,7 +116,7 @@ export default {
     fetchFacility() {
       var self = this
       self.loading = true
-      var url = '/api/facilities/' + self.$route.params.id
+      var url = '/api/facilities/' + self.$route.params.id + '/'
 
       fetch(url).then(function(response) {
         if (response.ok) {
