@@ -45,7 +45,12 @@
 
         <div class="field is-grouped is-grouped-right">
           <div class="control">
-            <button class="button is-primary">Save Changes</button>
+            <button class="button is-success">
+              <span class="icon is-small">
+                <i class="fas fa-check"></i>
+              </span>
+              <span>Save</span>
+            </button>
           </div>
         </div>
       </form>
