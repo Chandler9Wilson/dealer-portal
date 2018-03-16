@@ -139,7 +139,7 @@ export default {
         // https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials
         credentials: 'same-origin',
         body: JSON.stringify({
-          name: self.name,
+          name: self.name
         })
       }
       fetch(url, myInit).then(function(response) {
