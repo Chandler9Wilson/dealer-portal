@@ -28,12 +28,12 @@
       <div class="rect5"></div>
     </div>
 
-    <div v-if="error">
+    <div v-else-if="error">
       <!-- TODO improve error display -->
       {{ error }}
     </div>
 
-    <div v-if="hardwareID">
+    <div v-else>
     <!-- .prevent = the submit event will no longer reload the page -->
       <form class="box" @submit.prevent="updateDevice">
         <div class="field">
