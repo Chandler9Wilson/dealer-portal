@@ -118,7 +118,7 @@ def delete_customer(customer_id):
         # TODO add a try catch for sqlalchemy errors
         db.session.commit()
 
-        return make_response(None, 204)
+        return make_response('', 204)
 
 
 @api.route('/customers/', methods=['GET'])
@@ -248,7 +248,7 @@ def delete_facility(facility_id):
         # TODO add a try catch for sqlalchemy errors
         db.session.commit()
 
-        return make_response(None, 204)
+        return make_response('', 204)
 
 
 @api.route('/facilities/', methods=['GET'])
@@ -360,7 +360,7 @@ def delete_device(device_id):
         # TODO add a try catch for sqlalchemy errors
         db.session.commit()
 
-        return make_response(None, 204)
+        return make_response('', 204)
 
 
 @api.route('/devices/', methods=['GET'])
