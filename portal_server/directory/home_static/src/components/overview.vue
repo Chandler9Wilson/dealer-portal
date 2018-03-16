@@ -149,9 +149,10 @@ export default {
     this.fetchFacilities()
   },
   methods: {
+    // TODO add error handling
     fetchCustomers() {
       var self = this
-      self.customers.loading = true,
+      self.customers.loading = true
 
       fetch('/api/customers/').then(function(response) {
         return response.json()
@@ -162,7 +163,7 @@ export default {
     },
     fetchDevices() {
       var self = this
-      self.devices.loading = true,
+      self.devices.loading = true
 
       fetch('/api/devices/').then(function(response) {
         return response.json()
@@ -173,7 +174,7 @@ export default {
     },
     fetchFacilities() {
       var self = this
-      self.facilities.loading = true,
+      self.facilities.loading = true
 
       fetch('/api/facilities/').then(function(response) {
         return response.json()
