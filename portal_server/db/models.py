@@ -177,7 +177,7 @@ class Device(db.Model):
 
 
 class Data(db.Model):
-    # Reguraly collected data will be constantly hit with updates
+    # Reguraly collected data, will be constantly hit with updates
 
     __tablename__ = 'data'
 
