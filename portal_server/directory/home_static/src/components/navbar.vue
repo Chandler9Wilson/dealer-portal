@@ -13,13 +13,13 @@
 
           <div class="navbar-item has-dropdown" v-bind:class="{'is-active': isActive}" @click="isActive = !isActive">
             <a class="navbar-link">
-              Find
+              Create New
             </a>
 
             <div class="navbar-dropdown">
-              <router-link to="/facilities" class="navbar-item">Facility</router-link>
-              <router-link to="/customers" class="navbar-item">Customer</router-link>
-              <router-link to="/devices" class="navbar-item">Device</router-link>
+              <router-link to="/facilities/new" class="navbar-item">Facility</router-link>
+              <router-link to="/customers/new" class="navbar-item">Customer</router-link>
+              <router-link to="/devices/new" class="navbar-item">Device</router-link>
             </div>
           </div>
         </div>
@@ -38,6 +38,8 @@ export default {
   data() {
     return {
       msg: "Hello World",
+      // TODO improve the dropdown toggle to also capture clicks outside of the button
+      // posible solution https://github.com/buefy/buefy/blob/dev/src/components/dropdown/Dropdown.vue
       isActive: false
     }
   }
