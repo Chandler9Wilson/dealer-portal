@@ -19,6 +19,7 @@ MarkupSafe==1.0
 packaging==17.1
 pep8==1.7.1
 psycopg2==2.7.4
+pudb==2017.1.4
 pyasn1==0.4.2
 pyasn1-modules==0.2.1
 pycodestyle==2.3.1
@@ -34,4 +35,5 @@ sphinx-rtd-theme==0.2.4
 sphinxcontrib-websupport==1.0.1
 SQLAlchemy==1.2.0
 urllib3==1.22
+urwid==2.0.1
 Werkzeug==0.14.1
