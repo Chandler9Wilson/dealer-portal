@@ -38,11 +38,17 @@
 
 ## Debugging
 
-* with pudb (recommended)
-  * insert where you want a breakpoint `from pudb import set_trace; set_trace()`
-* with pdb
-  * insert `import pdb`
-  * && `pdb.set_trace()`
+* Tools
+  * with pudb (recommended)
+    * insert where you want a breakpoint `from pudb import set_trace; set_trace()`
+  * with pdb
+    * insert `import pdb; pdb.set_trace()`
+* Tips for api and auth
+  * Make sure you are sending credentials
+  * Make sure to disable cache if using a browser during development
+  * Make sure you are building using webpack if working on anything in directory static
+
+
 
 ## TO READ
 
