@@ -2,6 +2,9 @@ from flask import Blueprint, jsonify, abort, make_response, request
 
 from portal_server.db.models import Customer, Facility, Device, Data, db
 
+# flask-login used for login management and persistence
+from flask_login import login_required, current_user
+
 api = Blueprint('api', __name__)
 
 
@@ -67,6 +70,7 @@ def update_item(db_class, item, request_json):
 
 
 @api.route('/customers/', methods=['POST'])
+@login_required
 def create_customer():
     """Create a new customer"""
     if request.get_json() is None:
@@ -83,6 +87,7 @@ def create_customer():
 
 
 @api.route('/customers/<int:customer_id>/', methods=['PUT'])
+@login_required
 def update_customer(customer_id):
     """Update a customer
 
@@ -105,6 +110,7 @@ def update_customer(customer_id):
 
 
 @api.route('/customers/<int:customer_id>/', methods=['DELETE'])
+@login_required
 def delete_customer(customer_id):
     """Delete a specific customer by id"""
 
@@ -123,6 +129,7 @@ def delete_customer(customer_id):
 
 @api.route('/customers/', methods=['GET'])
 @api.route('/customers/<int:customer_id>/', methods=['GET'])
+@login_required
 def get_customers(customer_id=None):
     """Returns a customer or customers"""
     if customer_id is None:
@@ -139,6 +146,7 @@ def get_customers(customer_id=None):
 
 
 @api.route('/customers/<int:customer_id>/facilities/', methods=['GET'])
+@login_required
 def facilities_of_customer(customer_id):
     """Returns facilities with a relationship to customer_id"""
     customer = Customer.query.filter_by(id=customer_id).first()
@@ -155,6 +163,7 @@ def facilities_of_customer(customer_id):
 
 
 @api.route('/customers/<int:customer_id>/devices/', methods=['GET'])
+@login_required
 def devices_of_customer(customer_id):
     """Returns devices with a relationship to customer_id"""
     customer = Customer.query.filter_by(id=customer_id).first()
@@ -173,6 +182,7 @@ def devices_of_customer(customer_id):
 
 
 @api.route('/customers/<int:customer_id>/facilities/devices/', methods=['GET'])
+@login_required
 # TODO come up with a less verbose name
 def devices_of_facilities_of_customer(customer_id):
     """Returns facilities with nested devices owned by customer_id"""
@@ -198,6 +208,7 @@ def devices_of_facilities_of_customer(customer_id):
 
 
 @api.route('/facilities/', methods=['POST'])
+@login_required
 def create_facility():
     """Create a new facility"""
     if request.get_json() is None:
@@ -214,6 +225,7 @@ def create_facility():
 
 
 @api.route('/facilities/<int:facility_id>/', methods=['PUT'])
+@login_required
 def update_facility(facility_id):
     """Update a facility by id
 
@@ -236,6 +248,7 @@ def update_facility(facility_id):
 
 
 @api.route('/facilities/<int:facility_id>/', methods=['DELETE'])
+@login_required
 def delete_facility(facility_id):
     """Delete a specific facility by id"""
     facility = Facility.query.filter_by(id=facility_id).first()
@@ -253,6 +266,7 @@ def delete_facility(facility_id):
 
 @api.route('/facilities/', methods=['GET'])
 @api.route('/facilities/<int:facility_id>/', methods=['GET'])
+@login_required
 def get_facilities(facility_id=None):
     """Returns a facility or facilities"""
     if facility_id is None:
@@ -269,6 +283,7 @@ def get_facilities(facility_id=None):
 
 
 @api.route('/facilities/<int:facility_id>/devices/', methods=['GET'])
+@login_required
 def devices_of_facility(facility_id):
     """Returns devices with a relationship to facility_id"""
     facility = Facility.query.filter_by(id=facility_id).first()
@@ -286,6 +301,7 @@ def devices_of_facility(facility_id):
 
 
 @api.route('/facilities/<int:facility_id>/devices/data/', methods=['GET'])
+@login_required
 def data_of_facility(facility_id):
     """Returns devices with nested data owned by facility_id"""
     facility = Facility.query.filter_by(id=facility_id).first()
@@ -310,6 +326,7 @@ def data_of_facility(facility_id):
 
 
 @api.route('/devices/', methods=['POST'])
+@login_required
 def create_device():
     """Create a new device"""
     if request.get_json() is None:
@@ -326,6 +343,7 @@ def create_device():
 
 
 @api.route('/devices/<int:device_id>/', methods=['PUT'])
+@login_required
 def update_device(device_id):
     """Update a device by id
 
@@ -348,6 +366,7 @@ def update_device(device_id):
 
 
 @api.route('/devices/<int:device_id>/', methods=['DELETE'])
+@login_required
 def delete_device(device_id):
     """Delete a specific device by id"""
     device = Device.query.filter_by(id=device_id).first()
@@ -365,6 +384,7 @@ def delete_device(device_id):
 
 @api.route('/devices/', methods=['GET'])
 @api.route('/devices/<int:device_id>/', methods=['GET'])
+@login_required
 def get_devices(device_id=None):
 
     if device_id is None:
@@ -381,6 +401,7 @@ def get_devices(device_id=None):
 
 
 @api.route('/devices/<int:device_id>/data/', methods=['GET'])
+@login_required
 def data_of_device(device_id):
     """Returns devices with a relationship to device_id"""
     device = Device.query.filter_by(id=device_id).first()
@@ -398,6 +419,7 @@ def data_of_device(device_id):
 
 
 @api.route('/data/', methods=['POST'])
+@login_required
 def new_data():
     """Takes a data json and adds to db"""
     if request.get_json() is None:
