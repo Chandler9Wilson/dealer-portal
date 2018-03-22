@@ -6,17 +6,17 @@
       "type": "python",
       "request": "launch",
       "stopOnEntry": false,
-      "console": "integratedTerminal",
       "module": "flask",
       "pythonPath": "${config:python.pythonPath}",
       "cwd": "${workspaceFolder}",
       "env": {
-        "FLASK_APP": "${workspaceFolder}/run.py"
+        "FLASK_APP": "${workspaceFolder}/portal_server/__init__.py"
       },
       "args": [
         "run",
         "--no-debugger",
-        "--no-reload"
+        "--no-reload",
+        "threaded=true"
       ],
       "envFile": "${workspaceFolder}/.env",
       "debugOptions": [
