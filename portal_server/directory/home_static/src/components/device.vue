@@ -141,7 +141,17 @@ export default {
       self.loading = true
       var url = '/api/devices/' + self.$route.params.id + '/'
 
-      fetch(url).then(function(response) {
+      var myInit = {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        // https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials
+        credentials: 'same-origin'
+      }
+
+      fetch(url, myInit).then(function(response) {
         if (response.ok) {
           return response.json()
         }

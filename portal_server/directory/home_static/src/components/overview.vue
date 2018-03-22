@@ -154,7 +154,17 @@ export default {
       var self = this
       self.customers.loading = true
 
-      fetch('/api/customers/').then(function(response) {
+      var myInit = {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        // https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials
+        credentials: 'same-origin'
+      }
+
+      fetch('/api/customers/', myInit).then(function(response) {
         return response.json()
       }).then(function(customerJSON) {
         self.customers.data = customerJSON
@@ -165,7 +175,17 @@ export default {
       var self = this
       self.devices.loading = true
 
-      fetch('/api/devices/').then(function(response) {
+      var myInit = {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        // https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials
+        credentials: 'same-origin'
+      }
+
+      fetch('/api/devices/', myInit).then(function(response) {
         return response.json()
       }).then(function(deviceJSON) {
         self.devices.data = deviceJSON
@@ -176,7 +196,17 @@ export default {
       var self = this
       self.facilities.loading = true
 
-      fetch('/api/facilities/').then(function(response) {
+      var myInit = {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        // https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials
+        credentials: 'same-origin'
+      }
+
+      fetch('/api/facilities/', myInit).then(function(response) {
         return response.json()
       }).then(function(customerJSON) {
         self.facilities.data = customerJSON
