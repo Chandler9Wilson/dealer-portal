@@ -39,7 +39,15 @@
         <div class="field">
           <label class="label">Address</label>
           <div class="control">
-            <input v-model="address" class="input" type="text" placeholder="Address">
+            <input
+                v-validate="'required'"
+                v-model="address"
+                :class="{'input': true, 'is-danger': errors.has('address')}"
+                name="address"
+                type="text"
+                placeholder="Address"
+            />
+            <span v-show="errors.has('address')" class="help is-danger">{{ errors.first('address') }}</span>
           </div>
         </div>
 
@@ -165,6 +173,7 @@ export default {
       }
       fetch(url, myInit).then(function(response) {
         if (response.ok) {
+          self.$alert('success', 'Facility was updated')
           return response.json()
         }
         // TODO improve this error
@@ -194,6 +203,7 @@ export default {
       }
       fetch(url, myInit).then(function(response) {
         if (response.status == 204) {
+          self.$alert('success', 'Facility was deleted.')
           return null
         }
         // TODO improve this error

@@ -26,7 +26,9 @@
     "@fortawesome/fontawesome": "^1.1.4",
     "@fortawesome/fontawesome-free-solid": "^5.0.8",
     "bulma": "^0.6.2",
+    "vee-validate": "^2.0.6",
     "vue": "^2.5.13",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vue-toasted": "^1.1.24"
   }
 }

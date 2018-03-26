@@ -187,6 +187,7 @@ export default {
       }
       fetch(url, myInit).then(function(response) {
         if (response.ok) {
+          self.$alert('success', 'Device was updated.')
           return response.json()
         }
         // TODO improve this error
@@ -218,6 +219,7 @@ export default {
       }
       fetch(url, myInit).then(function(response) {
         if (response.status == 204) {
+          self.$alert('success', 'Device was deleted.')
           return null
         }
         // TODO improve this error
