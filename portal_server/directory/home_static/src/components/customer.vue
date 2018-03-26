@@ -39,7 +39,15 @@
         <div class="field">
           <label class="label">Name</label>
           <div class="control">
-            <input v-model="name" class="input" type="text" placeholder="Bowditch Navigation">
+            <input
+                v-validate.initial="'required'"
+                v-model="name"
+                :class="{'input': true, 'is-danger': errors.has('name')}"
+                name="name"
+                type="text"
+                placeholder="Bowditch Navigation"
+            />
+            <span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
           </div>
         </div>
 

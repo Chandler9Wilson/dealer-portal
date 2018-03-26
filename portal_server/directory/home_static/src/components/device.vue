@@ -39,14 +39,30 @@
         <div class="field">
           <label class="label">Hardware ID</label>
           <div class="control">
-            <input v-model.number="hardwareID" class="input" type="number" placeholder="123456789">
+            <input
+                v-validate.initial="'required'"
+                v-model.number="hardwareID"
+                :class="{'input': true, 'is-danger': errors.has('hardwareID')}"
+                name="hardwareID"
+                type="number"
+                placeholder="123456789"
+            />
+            <span v-show="errors.has('hardwareID')" class="help is-danger">{{ errors.first('hardwareID') }}</span>
           </div>
         </div>
 
         <div class="field">
           <label class="label">Device Type</label>
           <div class="control">
-            <input v-model="deviceType" class="input" type="text" placeholder="Temp only">
+            <input
+                v-validate.initial="'required'"
+                v-model="deviceType"
+                :class="{'input': true, 'is-danger': errors.has('deviceType')}"
+                name="deviceType"
+                type="text"
+                placeholder="Temp sensor V.1.23"
+            />
+            <span v-show="errors.has('deviceType')" class="help is-danger">{{ errors.first('deviceType') }}</span>
           </div>
           <p class="help">A description of the device</p>
         </div>
