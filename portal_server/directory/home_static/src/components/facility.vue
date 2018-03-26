@@ -40,12 +40,12 @@
           <label class="label">Address</label>
           <div class="control">
             <input
-                v-validate="'required'"
+                v-validate.initial="'required'"
                 v-model="address"
                 :class="{'input': true, 'is-danger': errors.has('address')}"
                 name="address"
                 type="text"
-                placeholder="Address"
+                placeholder="1600 Pennsylvania Ave NW, Washington, DC 20500"
             />
             <span v-show="errors.has('address')" class="help is-danger">{{ errors.first('address') }}</span>
           </div>
