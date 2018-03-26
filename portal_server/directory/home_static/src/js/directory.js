@@ -24,7 +24,7 @@ fontawesome.library.add(faCheck)
 Vue.toasted.register('error',
   (payload) => {
     if (payload.message) {
-      return 'A problem occured.. ' + payload.message
+      return payload.message
     }
     return 'A problem occured'
   },
