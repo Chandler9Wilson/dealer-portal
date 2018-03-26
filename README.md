@@ -1,16 +1,31 @@
 # Dealer Portal
 
-## This readme is for the Back-end e.g. Flask and DB management for Front-end work see the readme in ./static
-
 ---
+
+## About
+
+* Project overview
+  * This project is designed to keep track of customers, locations, and devices of a company that sells sensor packages for predictive maintence.
+  * The above data can be thought of as a hierarchical structure as follows
+
+```bash
+├── Customer
+│   ├── Facility
+│       ├── Device
+```
 
 ## Getting started
 
-1. Run `./server_managment/setup_script.py` respond yes when prompted if this is your first time.
-2. `$ source env/bin/activate`
-3. `$ pip install -r requirements.txt`
+* First time setup
+  1. Run `./server_managment/setup_script.py` respond yes when prompted if this is your first time.
+  2. `$ source env/bin/activate`
+  3. `$ pip install -r requirements.txt`
 
-## Viewing the Documentation
+* Navigating the project
+  * The majority of the server codebase is split into `flask blueprints` within the `portal_server` package
+  * Most of the frontend code is found within `.vue` files under `./portal_server/directory/home_static/src/components/`
+
+## Viewing the Documentation (Not written currently)
 
 1. Activate your env with `source env/bin/activate`
 2. `cd docs`
