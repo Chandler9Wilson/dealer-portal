@@ -35,7 +35,7 @@
 
     <div v-else>
     <!-- .prevent = the submit event will no longer reload the page -->
-      <form class="box" @submit.prevent="updateCustomer">
+      <form class="box" @submit.prevent="validateBeforeSubmit">
         <div class="field">
           <label class="label">Name</label>
           <div class="control">
@@ -199,6 +199,18 @@ export default {
       }).then(function() {
         self.clearData()
         self.$router.push('/')
+      })
+    },
+    validateBeforeSubmit() {
+      var self = this
+
+      self.$validator.validateAll().then((result) => {
+        if (result) {
+          self.updateCustomer()
+          return
+        } else {
+          self.$alert('error', 'There was a problem validating the form.')
+        }
       })
     },
     // TODO make this clear dynamically
