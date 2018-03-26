@@ -32,11 +32,19 @@
 
     <div v-else>
     <!-- .prevent = the submit event will no longer reload the page -->
-      <form class="box" @submit.prevent="updateFacility">
+      <form class="box" @submit.prevent="validateBeforeSubmit">
         <div class="field">
           <label class="label">Address</label>
           <div class="control">
-            <input v-model="address" class="input" type="text" placeholder="Address">
+            <input
+                v-validate="'required'"
+                v-model="address"
+                :class="{'input': true, 'is-danger': errors.has('address')}"
+                name="address"
+                type="text"
+                placeholder="1600 Pennsylvania Ave NW, Washington, DC 20500"
+            />
+            <span v-show="errors.has('address')" class="help is-danger">{{ errors.first('address') }}</span>
           </div>
         </div>
 
@@ -105,6 +113,18 @@ export default {
         var facilityID = facilityData.id
         var facilityURL = '/facilities/' + facilityID + '/'
         self.$router.push(facilityURL)
+      })
+    },
+    validateBeforeSubmit() {
+      var self = this
+
+      self.$validator.validateAll().then((result) => {
+        if (result) {
+          self.updateFacility()
+          return
+        } else {
+          self.$alert('error', 'There was a problem validating the form.')
+        }
       })
     },
     // TODO make this clear dynamically

@@ -32,18 +32,34 @@
 
     <div v-else>
     <!-- .prevent = the submit event will no longer reload the page -->
-      <form class="box" @submit.prevent="updateDevice">
+      <form class="box" @submit.prevent="validateBeforeSubmit">
         <div class="field">
           <label class="label">Hardware ID</label>
           <div class="control">
-            <input v-model.number="hardwareID" class="input" type="number" placeholder="123456789">
+            <input
+                v-validate="'required'"
+                v-model.number="hardwareID"
+                :class="{'input': true, 'is-danger': errors.has('hardwareID')}"
+                name="hardwareID"
+                type="number"
+                placeholder="123456789"
+            />
+            <span v-show="errors.has('hardwareID')" class="help is-danger">{{ errors.first('hardwareID') }}</span>
           </div>
         </div>
 
         <div class="field">
           <label class="label">Device Type</label>
           <div class="control">
-            <input v-model="deviceType" class="input" type="text" placeholder="Temp only">
+            <input
+                v-validate="'required'"
+                v-model="deviceType"
+                :class="{'input': true, 'is-danger': errors.has('deviceType')}"
+                name="deviceType"
+                type="text"
+                placeholder="Temp sensor V.1.23"
+            />
+            <span v-show="errors.has('deviceType')" class="help is-danger">{{ errors.first('deviceType') }}</span>
           </div>
           <p class="help">A description of the device</p>
         </div>
@@ -125,6 +141,18 @@ export default {
         var deviceID = deviceJSON.id
         var deviceURL = '/devices/' + deviceID + '/'
         self.$router.push(deviceURL)
+      })
+    },
+    validateBeforeSubmit() {
+      var self = this
+
+      self.$validator.validateAll().then((result) => {
+        if (result) {
+          self.updateDevice()
+          return
+        } else {
+          self.$alert('error', 'There was a problem validating the form.')
+        }
       })
     },
     // TODO make this clear dynamically
