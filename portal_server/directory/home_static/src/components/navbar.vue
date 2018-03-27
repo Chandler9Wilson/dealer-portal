@@ -4,9 +4,15 @@
       <a class="navbar-item" href="/home">
         <img src="http://via.placeholder.com/112x28" alt="I should probably update" width="112" height="28">
       </a>
+
+      <div class="navbar-burger" @click="showNav = !showNav" :class="{ 'is-active': showNav }">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
 
-    <div class="navbar-menu">
+    <div class="navbar-menu" :class="{ 'is-active': showNav }">
         <!-- Left side of the navbar after the brand image -->
         <div class="navbar-start">
           <router-link to="/" class="navbar-item">Home</router-link>
@@ -40,7 +46,8 @@ export default {
       msg: "Hello World",
       // TODO improve the dropdown toggle to also capture clicks outside of the button
       // posible solution https://github.com/buefy/buefy/blob/dev/src/components/dropdown/Dropdown.vue
-      isActive: false
+      isActive: false,
+      showNav: false
     }
   }
 }
