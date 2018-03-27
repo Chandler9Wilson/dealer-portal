@@ -8,8 +8,6 @@
   <meta name="google-signin-client_id" content="349469004723-j9csi1hlhb1s0abuap24lo50mgvbkrhh.apps.googleusercontent.com">
 
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css">
-
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 
 <body>
@@ -26,14 +24,10 @@
     </div>
   </section>
 
-  <div class="columns">
-    <div class="column is-one-third is-offset-one-third">
+  <div class="columns is-centered">
+    <div class="column is-one-third">
       <div class="box">
-        <div class="g-signin2"
-          data-onsuccess="onSignIn"
-          data-cookiepolicy="single_host_origin"
-          data-redirecturi="localhost:8080/home">
-        </div>
+        <div id="my-signin2"></div>
       </div>
     </div>
   </div>
@@ -42,6 +36,7 @@
   <script>
     var logoutFirst = '{{ logoutFirst }}'
   </script>
-  <script src="{{url_for('login_bp.static', filename='login.js')}}"></script>
+  <script src="{{url_for('login_bp.static', filename='js/login.js')}}"></script>
+  <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
 </body>
 </html>

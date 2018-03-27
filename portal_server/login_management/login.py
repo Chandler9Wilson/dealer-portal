@@ -1,13 +1,13 @@
 import json
 
 # flask-login used for login management and persistence
-from flask_login import login_required, login_user
+from flask_login import login_required, login_user, logout_user
 
 # used for google oauth verification of tokens
 from google.oauth2 import id_token
 from google.auth.transport import requests as googleRequests
 
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 
 # Import database classes and SQLAlchamy instance
 from portal_server.db.models import User
@@ -21,6 +21,13 @@ login_bp = Blueprint('login_bp', __name__,
 def login():
     # flask_login.logout_user()
     return render_template('login.html')
+
+
+@login_bp.route('/logout/')
+def logout():
+    logout_user()
+
+    return redirect(url_for('login_bp.login'))
 
 
 @login_bp.route('/debug/')

@@ -1,3 +1,9 @@
+// This logs out the user anytime login is visited
+// TODO find a better solution this seems less than ideal
+window.onbeforeunload = function (e) {
+  gapi.auth2.getAuthInstance().signOut()
+}
+
 function redirect () {
   document.location.href = '/home/'
 }
@@ -27,12 +33,22 @@ function sendToken (idToken) {
 
 // callback for google sign-in state change
 function onSignIn (googleUser) {
-  if (logoutFirst) {
-    gapi.auth2.getAuthInstance().signOut()
-    // prevents a signOut loop
-    logoutFirst = undefined
-  } else {
-    var idToken = googleUser.getAuthResponse().id_token
-    sendToken(idToken)
-  }
+  var idToken = googleUser.getAuthResponse().id_token
+  sendToken(idToken)
+}
+
+function onFailure (error) {
+  console.log(error)
+}
+
+function renderButton () {
+  gapi.signin2.render('my-signin2', {
+    'scope': 'profile email',
+    'width': 'auto',
+    'height': 50,
+    'longtitle': true,
+    'theme': 'dark',
+    'onsuccess': onSignIn,
+    'onfailure': onFailure
+  })
 }

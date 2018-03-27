@@ -32,7 +32,7 @@
 
         <!-- Right side of the navbar -->
         <div class="navbar-end">
-          <a class="navbar-item" href="/login?logout=true" onclick="logout()">Logout</a>
+          <a class="navbar-item" href="/logout/">Logout</a>
         </div>
       </div>
   </nav>
