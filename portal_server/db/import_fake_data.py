@@ -3,10 +3,10 @@
 import json
 import sys
 
-from run import app
+from portal_server import app
 
 # Import database classes and SQLAlchamy instance
-from db.models import Customer, Facility, Device, \
+from portal_server.db.models import Customer, Facility, Device, \
     Data, User, UserToFacility, Role, db
 
 
@@ -108,7 +108,7 @@ def parse_data(data):
 def load_data():
     # script_path should be the path to catalog/db
 
-    path_to_json = 'db/fake_data.JSON'
+    path_to_json = 'portal_server/db/fake_data.JSON'
 
     # good explenation of with http://effbot.org/zone/python-with-statement.htm
     with open(path_to_json) as fake_data:
