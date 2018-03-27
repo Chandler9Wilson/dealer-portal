@@ -10,7 +10,7 @@ from google.auth.transport import requests as googleRequests
 from flask import Blueprint, render_template, request, redirect, url_for
 
 # Import database classes and SQLAlchamy instance
-from portal_server.db.models import User
+from portal_server.db.models import User, db
 
 login_bp = Blueprint('login_bp', __name__,
                      static_folder='login_static',
@@ -83,7 +83,7 @@ def gconnect():
                     db.session.rollback()
                     print(str(e))
                     return "An error occured"
-                return redirect(url_for('home'))
+                return redirect(url_for('directory.home'))
     except ValueError:
         # TODO change to feed an error back to the user
 
