@@ -16,10 +16,18 @@
 
 ## Getting started
 
-* First time setup
-  1. Run `./server_managment/setup_script.py` respond yes when prompted if this is your first time.
-  2. `$ source env/bin/activate`
-  3. `$ pip install -r requirements.txt`
+* First time setup (This project has to be run in a debian based environment)
+  1. **All commands should be run from the project root unless a cd command was instructed previously**
+  2. Run `$ ./server_management/setup_script.py` respond yes when prompted if this is your first time.
+  3. Run `$ source env/bin/activate`
+  4. Run `$ python -m portal_server.db.setup`
+  5. If you want fake data in your db run `$ python -m portal_server.db.import_fake_data`
+  6. `$ cd portal_server/directory/home_static`
+  7. Run `$ npm install`
+  8. Run `$ npm run dev-build`
+  9. Return to project root `$ cd ../../..`
+  10. Run `$ python run.py`
+  11. Visit the [login page](http://localhost:8000/login/)
 
 * Navigating the project
   * The majority of the server codebase is split into `flask blueprints` within the `portal_server` package
@@ -35,10 +43,7 @@
 
 ## TODO
 
-* Frontend Menu layout
 * Implement flask principle for finer grained user permissions
-* update variable names to follow [this](http://flask.pocoo.org/docs/0.12/styleguide/#naming-conventions)
-* remove debug prints
 * remove all references to `catalog` changed name to `dealer_portal`
 * write documentation on db scripts
 * Add better server side validation
