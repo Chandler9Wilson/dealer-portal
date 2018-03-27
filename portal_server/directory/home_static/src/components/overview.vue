@@ -19,7 +19,7 @@
         </div>
 
 
-        <div v-if="customers.data">
+        <div v-if="customers.data" class="table__wrapper">
           <table class="table is-hoverable">
             <thead>
               <tr>
@@ -55,7 +55,7 @@
           {{ error }}
         </div>
 
-        <div v-if="facilities.data">
+        <div v-if="facilities.data" class="table__wrapper">
           <table class="table is-hoverable">
             <thead>
               <tr>
@@ -93,7 +93,7 @@
           {{ error }}
         </div>
 
-        <div v-if="devices.data">
+        <div v-if="devices.data" class="table__wrapper">
           <table class="table is-hoverable">
             <thead>
               <tr>
@@ -216,3 +216,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.table__wrapper {
+  overflow-x: auto;
+}
+</style>
