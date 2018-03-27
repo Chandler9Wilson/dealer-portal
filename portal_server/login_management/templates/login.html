@@ -7,23 +7,36 @@
   <!-- sets the client id for google -->
   <meta name="google-signin-client_id" content="349469004723-j9csi1hlhb1s0abuap24lo50mgvbkrhh.apps.googleusercontent.com">
 
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css">
+
   <script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 
 <body>
-  <div class="g-signin2"
-    data-onsuccess="onSignIn"
-    data-cookiepolicy="single_host_origin"
-    data-redirecturi="localhost:8080/home">
+  <section class="hero is-info">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          Login
+        </h1>
+        <h2 class="subtitle">
+          You need to login to access the site
+        </h2>
+      </div>
+    </div>
+  </section>
+
+  <div class="columns">
+    <div class="column is-one-third is-offset-one-third">
+      <div class="box">
+        <div class="g-signin2"
+          data-onsuccess="onSignIn"
+          data-cookiepolicy="single_host_origin"
+          data-redirecturi="localhost:8080/home">
+        </div>
+      </div>
+    </div>
   </div>
-
-  {% if current_user.is_authenticated %}
-    <h1>Hi {{ current_user.email }}!</h1>
-  {% endif %}
-
-  <div id="debug">{{debugIt}}</div>
-
-  <div id="result"></div>
 
   <!-- http://flask.pocoo.org/docs/0.12/api/#flask.url_for -->
   <script>
