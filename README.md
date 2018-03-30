@@ -48,6 +48,8 @@
   * Python = [PEP 8](https://www.python.org/dev/peps/pep-0008/)
 * Frontend tooling
   * webpack can be run with `$ npm run` find the commands in ./static/package.json
+* Python virtual env
+  * Run `$ source env/bin/activate` from ./ to run python commands
 
 ## Debugging
 
