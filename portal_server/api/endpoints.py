@@ -9,7 +9,33 @@ api = Blueprint('api', __name__)
 
 
 def get_items(db_class):
-    """Retrieves up to the first 500 items of a db_class defined in models"""
+    """Retrieves rows of a database class.
+
+    Retrieves up to the first 500 rows of a db_class defined in db.models.
+    This class needs to be imported before use.
+
+    Args:
+        db_class (obj): An imported class from db.models e.g. ``Customer``
+
+    Returns:
+        A JSON containing up to 500 rows matching the class argument.
+
+        An example stucture with 2 rows from ``Customer``::
+
+            [
+                {
+                    "id": 1,
+                    "name": "Chandler Wilson"
+                },
+                {
+                    "id": 2,
+                    "name": "Bowditch Navigation"
+                }
+            ]
+
+    Raises:
+        All errors will be from sqlalchemy and be passed along
+    """
     item_list = db_class.query.limit(500).all()
     # Really a list of dictionaries but couldn't think of a better name
     item_dicts = []
@@ -22,10 +48,20 @@ def get_items(db_class):
 
 
 def create_item(db_class, request_json):
-    """Creates a db entry
+    """Creates a database row for a given class.
 
-    with data from request_json,
-    schema from columns and db_class"""
+    Creates a database entry based on request_json for a given db_class. The
+    creation will fail if a required_attribute is None (empty strings will
+    work but are unadvised). See each class definition for more details on
+    required fields etc.
+
+    Args:
+        db_class (obj): An imported class from db.models e.g. ``Customer``
+        request_json (dict): A class obj described in a dictionary
+
+    Returns:
+        The newly created class instance in a JSON structure
+    """
     required_columns = db_class.required_columns()
 
     try:
