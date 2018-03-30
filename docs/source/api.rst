@@ -1,11 +1,15 @@
 The Dealer Portal API reference
 ===============================
 
-.. automodule:: dealer-portal
+.. automodule:: portal_server.api
   :members:
 
-The "run" module
-----------------
+The API
+----------------------
 
-.. automodule:: dealer-portal.run
+.. module:: api
+
+This API handles interactions between an external program e.g. a browser and the database.
+
+.. automodule:: portal_server.api.endpoints
   :members:
