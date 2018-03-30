@@ -66,9 +66,11 @@
 * Style
   * [Google style docstrings](https://google.github.io/styleguide/pyguide.html?showone=Comments#Comments)
   * Supported [sphinx flavoring](http://www.sphinx-doc.org/en/stable/ext/example_google.html) within above structure
-* Getting started
+* Learning how it works/format
   * [Tutorial with google styles included](https://pythonhosted.org/an_example_pypi_project/sphinx.html#full-code-example)
   * [Tutorial to understand sphinx](https://media.readthedocs.org/pdf/brandons-sphinx-tutorial/latest/brandons-sphinx-tutorial.pdf) **you need to adapt with Google style docstrings**
+* Notes on using
+  * Just run `$ make html` from the `./docs` folder
 
 
 ## TODO
