@@ -9,6 +9,19 @@ db = SQLAlchemy()
 
 
 class Customer(db.Model):
+    """The customer of a dealer
+
+    The customer is the highest unit in the business data of this project.
+    This means that excluding website data e.g. ``User``
+    no unit will own a customer. Most customers will have a
+    one to many relationship with ``Facility`` and by inheritence
+    ``Device`` and ``Data``.
+
+    Attributes:
+        id (int): This is an automatically generated primary id this should
+            never be modified by a user.
+        name (str): This is the customer name e.g. Bowditch Navigation.
+    """
 
     __tablename__ = 'customer'
 
@@ -25,14 +38,23 @@ class Customer(db.Model):
 
     # CRED https://stackoverflow.com/a/11884806/6879253
     def as_dict(self):
-        # returns an easily serializable dict
+        """Returns an easily serializable dictionary."""
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
     @classmethod
     def required_columns(cls):
-        # returns all required (nullable=False) columns \
-        # excluding primary key in a list
+        """Returns all required columns on the table.
 
+        Looks specifically for required (nullable=False) columns
+        excluding primary keys
+
+        Returns:
+            A list of column names that match the above spec e.g. ::
+
+                [
+                    'name'
+                ]
+        """
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
             c.name for c in cls.__table__.columns if not c.nullable and not
@@ -41,8 +63,18 @@ class Customer(db.Model):
 
     @classmethod
     def available_columns(cls):
-        # returns all available columns excluding primary key in a list
+        """Returns all user modifiable columns on the table.
 
+        Looks specifically for available (nullable=False) columns
+        excluding primary keys
+
+        Returns:
+            A list of column names that match the above spec e.g. ::
+
+                [
+                    'name'
+                ]
+        """
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
             c.name for c in cls.__table__.columns if not c.primary_key]
@@ -51,8 +83,19 @@ class Customer(db.Model):
     # CRED https://stackoverflow.com/a/30114013/6879253
     @classmethod
     def from_dict(cls, d):
-        # allows the class to be created from a dict (d)
+        """Creates a ``Customer`` from a dictionary
 
+        Filters a given dictionary to a new dictionary containing
+        only allowed fields, then passes this new dictionary to the
+        class for creation.
+
+        Args:
+            d (dict): A dictionary with all primary keys filled in
+                (this method does not filter for null or empty required keys)
+
+        Returns:
+            A new class instance created from the filtered dictionary.
+        """
         allowed = cls.available_columns()
 
         # https://www.python.org/dev/peps/pep-0274/
