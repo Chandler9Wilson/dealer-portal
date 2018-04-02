@@ -51,9 +51,8 @@ def create_item(db_class, request_json):
     """Creates a database row for a given class.
 
     Creates a database entry based on request_json for a given db_class. The
-    creation will fail if a required_attribute is None (empty strings will
-    work but are unadvised). See each class definition for more details on
-    required fields etc.
+    creation will fail if a required_attribute evaluates to a falsy value.
+    See each class definition for more details on required fields etc.
 
     Args:
         db_class (obj): An imported class from db.models e.g. ``Customer``
@@ -69,7 +68,8 @@ def create_item(db_class, request_json):
         for column in required_columns:
             required_attribute = request_json.get(column)
 
-            if required_attribute is not None:
+            # https://docs.python.org/3/library/stdtypes.html#truth-value-testing
+            if required_attribute:
                 continue
             elif required_attribute is None:
                 raise ValueError('A required attribute had a value of None')
@@ -92,9 +92,25 @@ def create_item(db_class, request_json):
 
 
 def update_item(db_class, item, request_json):
-    """loop through an item and update any valid changes"""
+    """Updates a row in a db_class' table
+
+    Will loop over request_json and accept any valid paremeters,
+    the class method also checks for any null properties on
+    required attributes. After this (assuming there was no errors)
+    the updated item will be commited to the db.
+
+    Args:
+        db_class (obj): An imported class from db.models e.g. ``Customer``
+        item (obj): A row object from the db that you will update.
+        request_json (dict): A dictionary containing all attributes to
+            be updated.
+
+    Returns:
+        The updated item object.
+    """
     for attribute, value in request_json.items():
-        if attribute in db_class.required_columns() and value is not None:
+        # https://docs.python.org/3/library/stdtypes.html#truth-value-testing
+        if attribute in db_class.required_columns() and value:
             setattr(item, attribute, value)
         elif attribute in db_class.available_columns():
             setattr(item, attribute, value)
