@@ -36,10 +36,8 @@
 ## Viewing the Documentation (Not written currently)
 
 1. Activate your env with `source env/bin/activate`
-2. `cd docs`
-3. `make html`
-4. `python -m http.server`
-5. Navigate to build/html
+2. Run `$ sphinx-autobuild docs/source/ docs/build/html/ -p 5000`
+3. Navigate to http://localhost:5000
 
 ## Development
 
