@@ -21,6 +21,10 @@ class Customer(db.Model):
         id (int): This is an automatically generated primary id this should
             never be modified by a user.
         name (str): This is the customer name e.g. Bowditch Navigation.
+            This is a required attribute.
+        facilities (list): A list of ``Facility`` objects with this customer
+            instance as a foreign key. This is populated by sqlalchemy and is
+            not a column in the database.
     """
 
     __tablename__ = 'customer'
@@ -106,6 +110,27 @@ class Customer(db.Model):
 
 
 class Facility(db.Model):
+    """A building that has or will contain devices
+
+    The ``Facility`` should usually be owned by a ``Customer``
+    but this is not a requirement. It's also usual for a facility to have
+    a one to many relationship with the ``Device`` table and
+    by inheritance the ``Data`` table.
+
+    Attributes:
+        id (int): This is an automatically generated primary id this should
+            never be modified by a user.
+        address (str): The full form address of a facility. This will need
+            to be prevalidated no validation is done within the class
+            currently. This is a required attribute.
+        customer_id (int): This should be the foreign key of a valid
+            ``Customer``. This attribute is encouraged but optional.
+        customer (obj): A customer that "owns" this facility. This is
+            populated by sqlalchemy and is not a column in the database.
+        devices (list): A list of ``Device`` instance objects with a foreign
+            key of this facility. This is populated by sqlalchemy and is not
+            a column in the database.
+    """
 
     __tablename__ = 'facility'
 
