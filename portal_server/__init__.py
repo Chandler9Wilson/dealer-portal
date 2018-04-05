@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, url_for
+from flask import Flask, url_for, redirect
 
 # flask-login used for login management and persistence
 from flask_login import LoginManager
@@ -59,3 +59,11 @@ def dated_url_for(endpoint, **values):
                                      endpoint, filename)
             values['q'] = int(os.stat(file_path).st_mtime)
     return url_for(endpoint, **values)
+
+
+@app.errorhandler(404)
+def not_found(error):
+    # Handle 404 errors so that they make more sense for the api
+    # TODO make this error a bit more descriptive
+
+    return redirect(url_for('login_bp.login'))
