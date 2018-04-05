@@ -1,4 +1,4 @@
-activate_this = '/home/chandler/dealer-portal/env/bin/activate_this.py'
+activate_this = '/home/chandler/dealer-portal/env/bin/activate'
 with open(activate_this) as file_:
     exec(file_.read(), dict(__file__=activate_this))
 
