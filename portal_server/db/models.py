@@ -150,12 +150,23 @@ class Facility(db.Model):
 
     # CRED https://stackoverflow.com/a/11884806/6879253
     def as_dict(self):
+        """Returns an easily serializable dictionary."""
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
     @classmethod
     def required_columns(cls):
-        # returns all required (nullable=False) columns \
-        # excluding primary key in a list
+        """Returns all required columns on the table.
+
+        Looks specifically for required (nullable=False) columns
+        excluding primary keys
+
+        Returns:
+            A list of column names that match the above spec e.g. ::
+
+                [
+                    'address'
+                ]
+        """
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
@@ -165,7 +176,18 @@ class Facility(db.Model):
 
     @classmethod
     def available_columns(cls):
-        # returns all available columns excluding primary key in a list
+        """Returns all user modifiable columns on the table.
+
+        Looks specifically for available (nullable=False) columns
+        excluding primary keys
+
+        Returns:
+            A list of column names that match the above spec e.g. ::
+
+                [
+                    'name'
+                ]
+        """
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
@@ -175,7 +197,19 @@ class Facility(db.Model):
     # CRED https://stackoverflow.com/a/30114013/6879253
     @classmethod
     def from_dict(cls, d):
-        # allows the class to be created from a dict (d)
+        """Creates a ``Facility`` from a dictionary
+
+        Filters a given dictionary to a new dictionary containing
+        only allowed fields, then passes this new dictionary to the
+        class for creation.
+
+        Args:
+            d (dict): A dictionary with all primary keys filled in
+                (this method does not filter for null or empty required keys)
+
+        Returns:
+            A new class instance created from the filtered dictionary.
+        """
 
         allowed = cls.available_columns()
 
@@ -186,6 +220,30 @@ class Facility(db.Model):
 
 
 class Device(db.Model):
+    """A sensor package that will report data on a facilities hvac unit
+
+    The ``Device`` should usually be owned by a ``Customer`` but there are
+    valid uses for this not to be the case so this is not a requirement.
+    It's also usual for a device to have a one to many relationship with
+    the ``Data`` table.
+
+    Attributes:
+        id (int): This is an automatically generated primary id this should
+            never be modified by a user.
+        hardware_id (int): A unique id that should be inherent to the
+            devices hardware.
+        device_type (str): A note on the device revision or notes on
+            the sensor package itself.
+        hvac_description (str): A description of the hvac location or
+            what area of a building an hvac services.
+        facility_id (int): This should be the foreign key of a valid
+            ``Facility``. This attribute is encouraged but optional.
+        data (obj): A list of data objects with this device's id as
+            their device_id. This is populated by sqlalchemy and is not
+            a column in the database.
+        facility (obj): A ``Facility`` object that owns this device. This
+            is populated by sqlalchemy and is not a column in the database.
+    """
 
     __tablename__ = 'device'
 
@@ -209,12 +267,24 @@ class Device(db.Model):
 
     # CRED https://stackoverflow.com/a/11884806/6879253
     def as_dict(self):
+        """Returns an easily serializable dictionary."""
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
     @classmethod
     def required_columns(cls):
-        # returns all required (nullable=False) columns \
-        # excluding primary key in a list
+        """Returns all required columns on the table.
+
+        Looks specifically for required (nullable=False) columns
+        excluding primary keys
+
+        Returns:
+            A list of column names that match the above spec e.g. ::
+
+                [
+                    'hardware_id',
+                    'device_type'
+                ]
+        """
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
@@ -224,7 +294,18 @@ class Device(db.Model):
 
     @classmethod
     def available_columns(cls):
-        # returns all available columns excluding primary key in a list
+        """Returns all user modifiable columns on the table.
+
+        Looks specifically for available (nullable=False) columns
+        excluding primary keys
+
+        Returns:
+            A list of column names that match the above spec e.g. ::
+
+                [
+                    'name'
+                ]
+        """
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
@@ -234,7 +315,19 @@ class Device(db.Model):
     # CRED https://stackoverflow.com/a/30114013/6879253
     @classmethod
     def from_dict(cls, d):
-        # allows the class to be created from a dict (d)
+        """Creates a ``Device`` from a dictionary
+
+        Filters a given dictionary to a new dictionary containing
+        only allowed fields, then passes this new dictionary to the
+        class for creation.
+
+        Args:
+            d (dict): A dictionary with all primary keys filled in
+                (this method does not filter for null or empty required keys)
+
+        Returns:
+            A new class instance created from the filtered dictionary.
+        """
 
         allowed = cls.available_columns()
 
@@ -245,7 +338,18 @@ class Device(db.Model):
 
 
 class Data(db.Model):
-    # Reguraly collected data, will be constantly hit with updates
+    """A data point for a given device
+
+    This should be by far the most active table in the db and constantly
+    hit by new data points. Although allowed a ``Data`` should never be
+    created without a linked ``Device``. The only reason this is allowed
+    is for saving data after a device deletion.
+
+    Attributes:
+        id (int): This is an automatically generated primary id this should
+            never be modified by a user.
+        timestamp (): TODO This should be iso?
+    """
 
     __tablename__ = 'data'
 
@@ -273,12 +377,21 @@ class Data(db.Model):
 
     # CRED https://stackoverflow.com/a/11884806/6879253
     def as_dict(self):
+        """Returns an easily serializable dictionary."""
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
     @classmethod
     def required_columns(cls):
-        # returns all required (nullable=False) columns \
-        # excluding primary key in a list
+        """Returns all required columns on the table.
+
+        Looks specifically for required (nullable=False) columns
+        excluding primary keys
+
+        Returns:
+            A list of column names that match the above spec e.g. ::
+
+                []
+        """
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
@@ -288,7 +401,18 @@ class Data(db.Model):
 
     @classmethod
     def available_columns(cls):
-        # returns all available columns excluding primary key in a list
+        """Returns all user modifiable columns on the table.
+
+        Looks specifically for available (nullable=False) columns
+        excluding primary keys
+
+        Returns:
+            A list of column names that match the above spec e.g. ::
+
+                [
+                    'name'
+                ]
+        """
 
         # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
         columns = [
@@ -298,7 +422,19 @@ class Data(db.Model):
     # CRED https://stackoverflow.com/a/30114013/6879253
     @classmethod
     def from_dict(cls, d):
-        # allows the class to be created from a dict (d)
+        """Creates a ``Data`` from a dictionary
+
+        Filters a given dictionary to a new dictionary containing
+        only allowed fields, then passes this new dictionary to the
+        class for creation.
+
+        Args:
+            d (dict): A dictionary with all primary keys filled in
+                (this method does not filter for null or empty required keys)
+
+        Returns:
+            A new class instance created from the filtered dictionary.
+        """
 
         allowed = cls.available_columns()
 
