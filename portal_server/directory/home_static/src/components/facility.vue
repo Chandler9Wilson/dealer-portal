@@ -70,6 +70,7 @@
           </div>
         </div>
       </form>
+      <devices-card :url="'/api/facilities/' + $route.params.id + '/devices/'"></devices-card>
     </div>
 
     <div v-if="deleteWarning">
@@ -103,8 +104,13 @@
 </template>
 
 <script>
+import devicesCard from './devicesCard.vue'
+
 export default {
   name: 'facility',
+  components: {
+    devicesCard
+  },
   data() {
     return {
       address: null,
