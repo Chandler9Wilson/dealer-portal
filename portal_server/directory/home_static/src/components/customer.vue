@@ -62,6 +62,7 @@
           </div>
         </div>
       </form>
+      <facilities-card :url="'/api/customers/' + $route.params.id + '/facilities/'"></facilities-card>
       <devices-card :url="'/api/customers/' + $route.params.id + '/devices/'"></devices-card>
     </div>
 
@@ -97,11 +98,13 @@
 
 <script>
 import devicesCard from './devicesCard.vue'
+import facilitiesCard from './facilitiesCard.vue'
 
 export default {
   name: 'customer',
   components: {
-    devicesCard
+    devicesCard,
+    facilitiesCard
   },
   data() {
     return {
