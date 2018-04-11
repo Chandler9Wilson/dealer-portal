@@ -1,4 +1,4 @@
-# This needs to be run as python -m db.import_fake_data
+# This needs to be run as python -m portal_server.db.import_fake_data
 # from the project root with an activated venv
 import json
 import sys
@@ -11,8 +11,10 @@ from portal_server.db.models import Customer, Facility, Device, \
 
 
 def create_item(db_class, request_json):
-    # Creates a db entry with data from request_json,
-    # schema from columns and db_class
+    """Creates a db entry and commits it
+
+    Schema is pulled from an imported db_class
+    """
 
     required_columns = db_class.required_columns()
 
@@ -34,18 +36,17 @@ def create_item(db_class, request_json):
         with app.app_context():
             db.session.add(new_item)
 
-            # TODO add a try catch for sqlalchemy errors
             db.session.commit()
 
-    # TODO add a more descriptive message
-    # TODO add a 201 status code to request
     return new_item
 
 
 def stage_item(db_class, request_json):
-    # Creates a db entry with data from request_json, does not commit to db
-    # schema pulled from db_class
+    """ Creates a db entry with data from request_json
 
+    This does not commit to the db, you will need to call
+    `db.commit(your_item)`. The schema is pulled from db_class.
+    """
     required_columns = db_class.required_columns()
 
     try:
@@ -53,61 +54,86 @@ def stage_item(db_class, request_json):
         for column in required_columns:
             required_attribute = request_json.get(column)
 
-            if required_attribute is not None:
+            if required_attribute:
                 continue
-            elif required_attribute is None:
+            else:
                 print(column)
-                raise ValueError('A required attribute had a value of None')
+                raise ValueError('A required attribute evaluated to false')
     except KeyError as e:
         error_message = 'KeyError - reason %s was not found' % str(e)
         print(error_message)
     else:
         new_item = db_class.from_dict(request_json)
 
-    # TODO add a more descriptive message
-    # TODO add a 201 status code to request
     return new_item
 
 
 def parse_data(data):
 
-    for customer in data['customers']:
-        create_item(Customer, customer)
+    customers = data.get('customers')
+    facilities = data.get('facilities')
+    devices = data.get('devices')
+    data_points = data.get('data_points')
+    sets = data.get('sets')
 
-    for facility in data['facilities']:
-        create_item(Facility, facility)
+    if customers:
+        for customer in customers:
+            create_item(Customer, customer)
 
-    for device in data['devices']:
-        create_item(Device, device)
+    if facilities:
+        for facility in facilities:
+            create_item(Facility, facility)
 
-    for obj in data['sets']:
+    if devices:
+        for device in devices:
+            create_item(Device, device)
 
-        with app.app_context():
-            customer = stage_item(Customer, obj['customer'])
-            db.session.add(customer)
+    print(data_points)
+    if data_points:
+        for point in data_points:
+            create_item(Data, point)
 
-            for facility in obj['facilities']:
-                new_facility = stage_item(Facility, facility)
-                db.session.add(new_facility)
+    if sets:
+        for obj in sets:
 
-                new_facility.customer = customer
+            with app.app_context():
+                customer = stage_item(Customer, obj['customer'])
+                db.session.add(customer)
 
-                for device in obj['devices']:
-                    if device['address'] == new_facility.address:
-                        new_device = stage_item(Device, device)
-                        db.session.add(new_device)
+                for facility in obj['facilities']:
+                    new_facility = stage_item(Facility, facility)
+                    db.session.add(new_facility)
 
-                        new_device.facility = new_facility
-                    else:
-                        continue
+                    new_facility.customer = customer
 
-            # TODO add a try catch for sqlalchemy errors
-            db.session.commit()
+                    for device in obj['devices']:
+                        if device['address'] == new_facility.address:
+                            new_device = stage_item(Device, device)
+                            db.session.add(new_device)
+
+                            new_device.facility = new_facility
+
+                            data_points = device.get('data_points')
+
+                            if data_points:
+                                for data_point in data_points:
+                                    new_data = stage_item(Data, data_point)
+                                    db.session.add(new_data)
+
+                                    new_data.device = new_device
+                        else:
+                            continue
+
+                # TODO add a try catch for sqlalchemy errors
+                db.session.commit()
 
 
 def load_data():
-    # script_path should be the path to catalog/db
+    """This returns a decoded json
 
+    Feel free to change the path to a different data set it defaults
+    to a small one.
+    """
     path_to_json = 'portal_server/db/fake_data.JSON'
 
     # good explenation of with http://effbot.org/zone/python-with-statement.htm
