@@ -8,6 +8,8 @@ from flask_login import LoginManager
 # Import database classes and SQLAlchamy instance
 from portal_server.db.models import db, User
 
+from secrets import db_username, db_password
+
 # Blueprint imports
 from portal_server.api.endpoints import api
 from portal_server.login_management.login import login_bp
@@ -17,9 +19,8 @@ from portal_server.directory.home import directory
 app = Flask(__name__)
 # TODO make config options more succinct
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://catalog:catalog@' + \
-    'localhost:5432/acmonitor'
-app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://' + db_username + ':' + \
+    db_password + '@localhost:5432/acmonitor'
 app.secret_key = 'super secret key'
 
 # Flask-Login class

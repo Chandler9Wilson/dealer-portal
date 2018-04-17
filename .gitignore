@@ -1,5 +1,6 @@
 # Contains client_secrets for run.py server
 client_secrets.json
+secrets.py
 # Exclude python virtual environment folder (just recreate on new machines)
 /env
 # require a rebuild when on a new machine
