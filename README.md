@@ -14,6 +14,10 @@
 │       ├── Device
 ```
 
+### System Requirements
+
+* Debian flavor of Linux
+
 ## Getting started
 
 * First time setup (This project has to be run in a debian based environment)
