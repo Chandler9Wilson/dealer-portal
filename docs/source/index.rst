@@ -9,4 +9,6 @@ Welcome to Dealer Portal's documentation!
 .. toctree::
    :maxdepth: 2
 
+   install
    api
+   deploy
