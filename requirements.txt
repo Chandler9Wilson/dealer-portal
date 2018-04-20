@@ -13,6 +13,7 @@ Flask==0.12.2
 Flask-Login==0.4.1
 Flask-SQLAlchemy==2.3.2
 google-auth==1.4.1
+gunicorn==19.7.1
 httplib2==0.11.3
 idna==2.6
 imagesize==1.0.0
@@ -27,7 +28,7 @@ pathtools==0.1.2
 pep8==1.7.1
 pluggy==0.6.0
 port-for==0.3.1
-psycopg2==2.7.4
+psycopg2-binary==2.7.4
 pudb==2017.1.4
 py==1.5.3
 pyasn1==0.4.2
