@@ -53,12 +53,8 @@
 * Python virtual env
   * Run `$ source env/bin/activate` from ./ to run python commands
 * Viewing the project on the production server
-  * apache
-    * `$ sudo apt-get install apache2`
-    * `$ sudo apt-get install apache2-dev`
-  * python3-dev
-    * `$ sudo apt-get install python3-dev`
-  * Start the server with `$ mod_wsgi-express start-server portal_server.wsgi`
+  * Make sure you are in the virtual env and in the project root
+  * Start the server with `$ gunicorn -w 4 portal_server:app`
 
 ## Debugging
 
