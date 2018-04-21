@@ -15,9 +15,9 @@ Setting up the server
   * Allow port 2200 tcp for alternate SSH port
 
     * ``$ sudo ufw allow 2200/tcp``
-  * Allow port 80 tcp for apache
+  * Allow port nginx
 
-    * ``$ sudo ufw allow www``
+    * ``$ sudo ufw allow 'Nginx Full'``
   * Allow port 123 for NTP
 
     * ``$ sudo ufw allow ntp``
@@ -27,10 +27,13 @@ Installing needed software
 
 * Install nvm
 
-  * `$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash`
+  * ``$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash``
 * Install node (after session restart)
 
-  * `$ nvm install 8`
+  * ``$ nvm install 8``
+* Install nginx
+
+  * ``$ sudo apt-get install nginx``
 * :doc:`install`
 * Make sure gunicorn is serving the project correctly
 
@@ -43,6 +46,53 @@ Installing needed software
     * ``$ sudo ufw delete allow 8000/tcp``
 
 
+Setup systemd service
+---------------------
+
+* You should follow the instructions in `this tutorial`_
+* The contents of ``/etc/systemd/system/dealer-portal.service`` should be as follows except with an updated user
+
+.. code-block:: guess
+
+    [Unit]
+    Description=Gunicorn instance to serve dealer-portal
+    After=network.target
+
+    [Service]
+    User=chandler
+    Group=www-data
+    WorkingDirectory=/home/chandler/dealer-portal
+    Environment="Path=/home/chandler/dealer-portal/env/bin"
+    ExecStart=/home/chandler/dealer-portal/env/bin/gunicorn --workers 3 --bind unix:dealer-portal.sock -m 007 portal_server:app
+
+    [Install]
+    WantedBy=multi-user.target
+
+
+.. _`this tutorial`: https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-16-04#create-a-systemd-unit-file
+
+Configure Nginx
+---------------
+
+* You should follow the instructions in `this config tutorial`_
+* The contents of ``/etc/nginx/sites-available/dealer-portal`` should be as follows except with an updated user
+
+.. code-block:: guess
+
+    server {
+        listen 80;
+        server_name chandler9wilson.com;
+
+        location / {
+            include proxy_params;
+            proxy_pass http://unix:/home/chandler/dealer-portal/dealer-portal.sock;
+        }
+    }
+
+
+.. _`this config tutorial`: https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-16-04#configuring-nginx-to-proxy-requests
+
+
 Guide Reference
 ---------------
 
@@ -50,3 +100,6 @@ Guide Reference
 * Used [this](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-16-04) for usermod command and the ssh-copy-id script. I have set up servers before just couldnt remember those two lines.
 * A nice walk through the [options with UFW](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-14-04) a little nicer/more concise than the man page.
 * I am using the mod_wsgi-express script included with the [mod_wsgi package](https://pypi.python.org/pypi/mod_wsgi)
+* Overall I am using `this guide`_ for setting up nginx and gunicorn
+
+.. _`this guide`: https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-16-04
