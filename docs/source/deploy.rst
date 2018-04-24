@@ -93,13 +93,27 @@ Configure Nginx
 .. _`this config tutorial`: https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-16-04#configuring-nginx-to-proxy-requests
 
 
+Updating Content
+----------------
+
+From the project root run the following
+
+1. Run ``$ git pull``
+2. Rebuild webpack if needed
+
+  * ``$ cd portal_server/directory/home_static``
+  * ``$ npm run build``
+
+3. ``$ sudo systemctl restart dealer-portal``
+4. ``$ sudo systemctl restart nginx``
+
+
 Guide Reference
 ---------------
 
 * relevant man pages
 * Used [this](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-16-04) for usermod command and the ssh-copy-id script. I have set up servers before just couldnt remember those two lines.
 * A nice walk through the [options with UFW](https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-14-04) a little nicer/more concise than the man page.
-* I am using the mod_wsgi-express script included with the [mod_wsgi package](https://pypi.python.org/pypi/mod_wsgi)
 * Overall I am using `this guide`_ for setting up nginx and gunicorn
 
 .. _`this guide`: https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-16-04
