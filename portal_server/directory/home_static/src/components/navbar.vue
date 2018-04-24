@@ -2,7 +2,7 @@
   <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <a class="navbar-item" href="/home">
-        <img src="http://via.placeholder.com/112x28" alt="I should probably update" width="112" height="28">
+        <img src="https://via.placeholder.com/112x28" alt="I should probably update" width="112" height="28">
       </a>
 
       <div class="navbar-burger" @click="showNav = !showNav" :class="{ 'is-active': showNav }">
