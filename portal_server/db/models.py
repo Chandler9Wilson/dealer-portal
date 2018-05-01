@@ -256,7 +256,9 @@ class Device(db.Model):
 
     # Begin sqlalchemy specific code (wont be in the db)
 
-    data = db.relationship('Data', back_populates='device')
+    # See http://docs.sqlalchemy.org/en/latest/orm/collections.html
+    # Above explains the implication of lazy='dynamic'
+    data = db.relationship('Data', lazy='dynamic', back_populates='device')
     facility = db.relationship('Facility', back_populates='devices')
 
     def __repr__(self):
