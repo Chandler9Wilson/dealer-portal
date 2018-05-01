@@ -2,6 +2,9 @@ from flask import Blueprint, jsonify, abort, make_response, request
 
 from portal_server.db.models import Customer, Facility, Device, Data, db
 
+# Used for sorting data endpoints
+from sqlalchemy import desc
+
 # flask-login used for login management and persistence
 from flask_login import login_required, current_user
 
@@ -453,7 +456,7 @@ def get_devices(device_id=None):
 
 
 @api.route('/devices/<int:device_id>/data/', methods=['GET'])
-@login_required
+# @login_required
 def data_of_device(device_id):
     """Returns devices with a relationship to device_id"""
     device = Device.query.filter_by(id=device_id).first()
@@ -461,7 +464,8 @@ def data_of_device(device_id):
     if device is None:
         return abort(404)
     else:
-        data_list = device.data
+        data_list = device.data.order_by(
+            desc(Data.timestamp)).limit(1000).all()
         data_dicts = []
 
         for data in data_list:
