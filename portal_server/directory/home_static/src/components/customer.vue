@@ -62,6 +62,7 @@
           </div>
         </div>
       </form>
+
       <facilities-card :url="'/api/customers/' + $route.params.id + '/facilities/'"></facilities-card>
       <devices-card :url="'/api/customers/' + $route.params.id + '/devices/'"></devices-card>
     </div>

@@ -70,6 +70,7 @@
           </div>
         </div>
       </form>
+
       <devices-card :url="'/api/facilities/' + $route.params.id + '/devices/'"></devices-card>
     </div>
 
