@@ -108,6 +108,17 @@ From the project root run the following
 4. ``$ sudo systemctl restart nginx``
 
 
+Improvements to be made
+-----------------------
+
+Currently static content is large and served relativly slowling through flask. This can be fixed by serving through nginx and gziping in or after the build.
+
+* `Change headers for gzip`_
+* `Serve Static content through Nginx`_
+
+.. _`Change headers for gzip`: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
+.. _`Serve Static content through Nginx`: http://docs.gunicorn.org/en/latest/deploy.html
+
 Guide Reference
 ---------------
 
