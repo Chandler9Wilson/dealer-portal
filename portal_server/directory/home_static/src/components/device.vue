@@ -94,6 +94,8 @@
           </div>
         </div>
       </form>
+
+      <data-card :url="'/api/devices/' + $route.params.id + '/data/'"></data-card>
     </div>
 
     <div v-if="deleteWarning">
@@ -127,8 +129,13 @@
 </template>
 
 <script>
+import dataCard from './dataCard.vue'
+
 export default {
   name: 'device',
+  components: {
+    dataCard
+  },
   data() {
     return {
       hardwareID: null,
