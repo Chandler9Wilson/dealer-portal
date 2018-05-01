@@ -88,13 +88,13 @@ def interactive():
     print('-' * 30)
     answer = input()
 
-    if answer in ('Y', 'y'):
+    if answer in ('Y', 'y', 'yes'):
         install_postgresql()
         start_postresql()
         create_dbs()
         setup_venv(script_path)
         setup_models(script_path)
-    elif answer in ('N', 'n'):
+    elif answer in ('N', 'n', 'no'):
         start_postresql()
         create_dbs()
     elif answer in ('Test', 'test'):
