@@ -8,6 +8,31 @@ System Requirements
 * A non root user with ``sudo`` privileges
 * Node v.8
 
+Create a secrets.py file
+------------------------
+
+A secrets.py file is used to store several things. **This file needs to be restricted in production environments** using `chmod`_.
+
+The file needs to contains the following:
+
+* Database username and password
+
+  * Both should be set during the ``setup_script``.
+    Make sure you have the same credentials copied over (username's default is ``catalog``) or the application will not work.
+* Flask's ``secret_key`` which is used for session cryptography
+
+  * To generate a good key run ``$ python -c 'import os; print(os.urandom(16))'``
+
+An example ``secrets.py`` file would be as follows:
+
+.. code-block:: python
+
+    db_username = 'catalog'
+    db_password = 'catalog'
+    flask_secret_key = b'\xfa\x85\xf7\xcc/I\xb7\xf2\xa1P\xb0o\xae\x95s\x17'
+
+.. _`chmod`: https://www.computerhope.com/unix/uchmod.htm
+
 Install Steps
 -------------
 
