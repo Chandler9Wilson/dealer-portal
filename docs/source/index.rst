@@ -10,5 +10,6 @@ Welcome to Dealer Portal's documentation!
    :maxdepth: 2
 
    install
+   run
    api
    deploy
