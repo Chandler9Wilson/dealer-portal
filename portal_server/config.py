@@ -23,3 +23,5 @@ class ProductionConfig(BaseConfig):
 
 class TestingConfig(BaseConfig):
     TESTING = True
+    # Sets login_required decorators to be ignored
+    LOGIN_DISABLED = True
