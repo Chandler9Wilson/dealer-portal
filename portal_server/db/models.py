@@ -450,8 +450,19 @@ class Data(db.Model):
 
 
 class User(db.Model):
-    # A user of the website
+    """A user of the website
 
+    Attributes:
+        id (int): This is an automatically generated primary id this should
+            never be modified by a user.
+        name (str): The users full name.
+        email (str): A valid email, this is a required attribute.
+        profile_pic (str): A valid url to a users profile pic
+        oauth_provider (str): The oauth_provider that a user signed in with,
+            this is a required field.
+        roles: A sqlalchemy populated column with the roles that link
+            to this user.
+    """
     __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -509,6 +520,30 @@ class User(db.Model):
         columns = [
             c.name for c in cls.__table__.columns if not c.primary_key]
         return columns
+
+    # CRED https://stackoverflow.com/a/30114013/6879253
+    @classmethod
+    def from_dict(cls, d):
+        """Creates a ``User`` from a dictionary
+
+        Filters a given dictionary to a new dictionary containing
+        only allowed fields, then passes this new dictionary to the
+        class for creation.
+
+        Args:
+            d (dict): A dictionary with all primary keys filled in
+                (this method does not filter for null or empty required keys)
+
+        Returns:
+            A new class instance created from the filtered dictionary.
+        """
+        allowed = cls.available_columns()
+
+        # https://www.python.org/dev/peps/pep-0274/
+        dict_filter = {key: value for key,
+                       value in d.items() if key in allowed}
+
+        return cls(**dict_filter)
 
 
 class Role(db.Model):
