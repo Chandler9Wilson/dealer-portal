@@ -484,9 +484,9 @@ class User(db.Model):
 
     def __repr__(self):
         return """<User(id='%s', name='%s', email='%s', profile_pic='%s',
-            oauth_provider='%s')>""" % (
+            oauth_provider='%s', roles='%s')>""" % (
             self.id, self.name, self.email, self.profile_pic,
-            self.oauth_provider)
+            self.oauth_provider, self.roles)
 
     def is_authenticated(self):
         return True
