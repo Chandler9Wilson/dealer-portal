@@ -446,7 +446,7 @@ class Data(db.Model):
         return cls(**dict_filter)
 
 
-# Start user related tables
+# Start website user related tables
 
 
 class User(db.Model):
@@ -461,6 +461,10 @@ class User(db.Model):
     # TODO this needs to be a seperate table
     # for multiple login options for the same user
     oauth_provider = db.Column(db.String, nullable=False)
+
+    # Begin sqlalchemy specific code (wont be in the db)
+
+    roles = db.relationship('Role', back_populates='user')
 
     def __init__(self, email, oauth_provider, active=True):
         self.oauth_provider = oauth_provider
@@ -507,45 +511,6 @@ class User(db.Model):
         return columns
 
 
-class UserToFacility(db.Model):
-    # A workers db.relationship to a facility to be used with permissions
-
-    __tablename__ = 'user_to_facility'
-
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'))
-
-    # Begin sqlalchemy specific code (wont be in the db)
-
-    user = db.relationship('User')
-    facility = db.relationship('Facility')
-
-    def __repr__(self):
-        return "<User(id='%s', user_id='%s', facility_id='%s')>" % (
-            self.id, self.user_id, self.facility_id)
-
-    @classmethod
-    def required_columns(cls):
-        # returns all required (nullable=False) columns \
-        # excluding primary key in a list
-
-        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
-        columns = [
-            c.name for c in cls.__table__.columns if not c.nullable and not
-            c.primary_key]
-        return columns
-
-    @classmethod
-    def available_columns(cls):
-        # returns all available columns excluding primary key in a list
-
-        # https://docs.python.org/3.5/tutorial/datastructures.html#list-comprehensions
-        columns = [
-            c.name for c in cls.__table__.columns if not c.primary_key]
-        return columns
-
-
 class Role(db.Model):
     # A users Role e.g. contracter, admin
     __tablename__ = 'role'
@@ -556,7 +521,7 @@ class Role(db.Model):
 
     # Begin sqlalchemy specific code (wont be in the db)
 
-    user = db.relationship('User')
+    user = db.relationship('User', back_populates='roles')
 
     def __repr__(self):
         return "<User(id='%s', title='%s', user_id='%s')>" % (
