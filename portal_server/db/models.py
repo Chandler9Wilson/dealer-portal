@@ -477,11 +477,6 @@ class User(db.Model):
 
     roles = db.relationship('Role', back_populates='user')
 
-    def __init__(self, email, oauth_provider, active=True):
-        self.oauth_provider = oauth_provider
-        self.email = email
-        self.is_active = active
-
     def __repr__(self):
         return """<User(id='%s', name='%s', email='%s', profile_pic='%s',
             oauth_provider='%s', roles='%s')>""" % (
