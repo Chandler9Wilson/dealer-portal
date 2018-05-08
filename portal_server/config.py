@@ -16,6 +16,11 @@ class DevelopmentConfig(BaseConfig):
     DEBUG = True
 
 
+class SqlAlchemyDebug(BaseConfig):
+    DEBUG = True
+    SQLALCHEMY_ECHO = True
+
+
 class ProductionConfig(BaseConfig):
     DEBUG = False
     TESTING = False
