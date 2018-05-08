@@ -28,6 +28,8 @@
               <router-link to="/devices/new" class="navbar-item">Device</router-link>
             </div>
           </div>
+
+          <a v-if="isAdmin" href="/admin" class="navbar-item">Admin</a>
         </div>
 
         <!-- Right side of the navbar -->
@@ -47,7 +49,34 @@ export default {
       // TODO improve the dropdown toggle to also capture clicks outside of the button
       // posible solution https://github.com/buefy/buefy/blob/dev/src/components/dropdown/Dropdown.vue
       isActive: false,
+      isAdmin: null,
       showNav: false
+    }
+  },
+  created() {
+    this.checkIfAdmin()
+  },
+  methods: {
+    checkIfAdmin() {
+      var self = this
+      self.loading = true
+      var url = '/admin/api/'
+
+      var myInit = {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        // https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials
+        credentials: 'same-origin'
+      }
+
+      fetch(url, myInit).then(function(response) {
+        if (response.ok) {
+          return self.isAdmin = true
+        }
+      })
     }
   }
 }
