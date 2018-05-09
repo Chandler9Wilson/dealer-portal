@@ -1,9 +1,9 @@
 <template>
   <nav class="navbar is-primary" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-      <a class="navbar-item" href="/home">
+      <router-link to="/" class="navbar-item">
         <img src="https://via.placeholder.com/112x28" alt="I should probably update" width="112" height="28">
-      </a>
+      </router-link>
 
       <div class="navbar-burger" @click="showNav = !showNav" :class="{ 'is-active': showNav }">
         <span></span>
@@ -15,8 +15,6 @@
     <div class="navbar-menu" :class="{ 'is-active': showNav }">
         <!-- Left side of the navbar after the brand image -->
         <div class="navbar-start">
-          <router-link to="/" class="navbar-item">Home</router-link>
-
           <div class="navbar-item has-dropdown" v-bind:class="{'is-active': isActive}" @click="isActive = !isActive">
             <a class="navbar-link">
               Create New
