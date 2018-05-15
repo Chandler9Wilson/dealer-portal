@@ -6,6 +6,7 @@ import VeeValidate from 'vee-validate'
 
 // Project files
 import router from '../router'
+import store from '../store'
 import App from './../App.vue'
 
 // Font awesome library followed by imported icons
@@ -101,6 +102,7 @@ Vue.prototype.$alert = function (type, message) {
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
