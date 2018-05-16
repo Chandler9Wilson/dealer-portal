@@ -3,6 +3,7 @@ import axios from 'axios'
 
 // initial state
 const state = {
+  // This is the Customer || Facility || Device that is loaded
   loadedObject: null,
   model: null,
   loading: null,
