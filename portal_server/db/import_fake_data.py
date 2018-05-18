@@ -29,7 +29,7 @@ def create_item(db_class, request_json):
                 raise ValueError('A required attribute had a value of None')
     except KeyError as e:
         error_message = 'KeyError - reason %s was not found' % str(e)
-        print(error_message)
+        print(error_message, '32')
     else:
         new_item = db_class.from_dict(request_json)
 
@@ -57,11 +57,11 @@ def stage_item(db_class, request_json):
             if required_attribute:
                 continue
             else:
-                print(column)
+                print(column, '60')
                 raise ValueError('A required attribute evaluated to false')
     except KeyError as e:
         error_message = 'KeyError - reason %s was not found' % str(e)
-        print(error_message)
+        print(error_message, '64')
     else:
         new_item = db_class.from_dict(request_json)
 
@@ -88,7 +88,6 @@ def parse_data(data):
         for device in devices:
             create_item(Device, device)
 
-    print(data_points)
     if data_points:
         for point in data_points:
             create_item(Data, point)
