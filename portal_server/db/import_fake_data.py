@@ -7,7 +7,7 @@ from portal_server import app
 
 # Import database classes and SQLAlchamy instance
 from portal_server.db.models import Customer, Facility, Device, \
-    Data, User, UserToFacility, Role, db
+    Data, Role, db
 
 
 def create_item(db_class, request_json):
