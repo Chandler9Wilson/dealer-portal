@@ -115,9 +115,12 @@ Currently static content is large and served relativly slowling through flask. T
 
 * `Change headers for gzip`_
 * `Serve Static content through Nginx`_
+  * This would probably use `x-sendfile`_ and flask's `send_from_directory()`_
 
 .. _`Change headers for gzip`: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
 .. _`Serve Static content through Nginx`: http://docs.gunicorn.org/en/latest/deploy.html
+.. _`x-sendfile`: https://www.nginx.com/resources/wiki/start/topics/examples/xsendfile/
+.. _`send_from_directory()`: http://flask.pocoo.org/docs/1.0/api/#flask.send_from_directory
 
 Guide Reference
 ---------------
