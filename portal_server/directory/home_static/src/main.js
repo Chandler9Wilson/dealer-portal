@@ -5,19 +5,21 @@ import Toasted from 'vue-toasted'
 import VeeValidate from 'vee-validate'
 
 // Project files
-import router from '../router'
-import store from '../store'
-import App from './../App.vue'
+import App from './App.vue'
+import router from './router'
+import store from './store'
 
 // Font awesome library followed by imported icons
 import fontawesome from '@fortawesome/fontawesome'
 import faCheck from '@fortawesome/fontawesome-free-solid/faCheck'
 
+// CSS imports
+import 'bulma/css/bulma.css'
+import './css/directory.css'
+
 // Vue plugin registration
 Vue.use(VeeValidate)
 Vue.use(Toasted)
-
-require('bulma/css/bulma.css')
 
 fontawesome.library.add(faCheck)
 
@@ -98,11 +100,10 @@ Vue.prototype.$alert = function (type, message) {
   }
 }
 
-/* eslint-disable no-new */
+Vue.config.productionTip = false
+
 new Vue({
-  el: '#app',
   router,
   store,
-  components: { App },
-  template: '<App/>'
-})
+  render: h => h(App)
+}).$mount('#app')
