@@ -45,9 +45,9 @@ Install Steps
   5. If you want fake data in your db run ``$ python -m portal_server.db.import_fake_data``
   6. ``$ cd portal_server/directory/home_static``
   7. Run ``$ npm install``
-  8. Run ``$ npm run dev-build``
+  8. Run ``$ npm run build``
   9. Return to project root ``$ cd ../../..``
-  10. Run ``$ python run.py``
+  10. See :doc:`run` for instructions on running the project
   11. Visit the `login page`__
 
 .. _login: http://localhost:8000/login/
