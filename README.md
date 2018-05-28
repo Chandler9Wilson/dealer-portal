@@ -67,13 +67,6 @@
   * [Tutorial with google styles included](https://pythonhosted.org/an_example_pypi_project/sphinx.html#full-code-example)
   * [Tutorial to understand sphinx](https://media.readthedocs.org/pdf/brandons-sphinx-tutorial/latest/brandons-sphinx-tutorial.pdf) **you need to adapt with Google style docstrings**
 
-## TODO
-
-* Implement flask principle for finer grained user permissions
-* remove all references to `catalog` changed name to `dealer_portal`
-* write documentation on db scripts
-* Add better server side validation
-
 ## TO READ
 
 * [things which arent magic flask](https://ains.co/blog/things-which-arent-magic-flask-part-1.html)
