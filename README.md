@@ -51,6 +51,7 @@
   * Make sure you are sending credentials
   * Make sure to disable cache if using a browser during development
   * Make sure you are building using webpack if working on anything in directory static
+* Try out new vscode [debugging for flask](https://code.visualstudio.com/docs/python/tutorial-flask)
 
 ## Writing documentation
 
