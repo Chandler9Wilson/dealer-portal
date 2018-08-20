@@ -5,7 +5,7 @@
 ## About
 
 * Project overview
-  * This project is designed to keep track of customers, locations, and devices of a company that sells sensor packages for predictive maintence.
+  * This project is designed to keep track of customers, locations, and devices of a company that sells sensor packages for predictive maintenance.
   * The above data can be thought of as a hierarchical structure as follows
 
 ```bash
