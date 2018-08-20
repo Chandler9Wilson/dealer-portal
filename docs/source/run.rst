@@ -6,9 +6,19 @@ There are two main ways that the ``portal_server`` project can be run:
 Flask's built-in server
 -----------------------
 
+Flasks built in development server is useful for its live reload functionality.
+
+* Make sure you are in the virtual env and at the project root
+* Start the server with `$ python run.py`
 
 Gunicorn
 --------
+
+Gunicorn is the WSGI server used in production but it can also be run on your development machine.
+
+* Make sure you are in the virtual env and at the project root
+* Start the server with `$ gunicorn -w 4 portal_server:app`
+
 
 Configuration
 -------------
