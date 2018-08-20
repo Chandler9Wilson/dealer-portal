@@ -13,7 +13,7 @@ Create a secrets.py file
 
 A secrets.py file is used to store several things. **This file needs to be restricted in production environments** using `chmod`_.
 
-The file needs to contains the following:
+The file needs to contain the following:
 
 * Database username and password
 
@@ -21,7 +21,7 @@ The file needs to contains the following:
     Make sure you have the same credentials copied over (username's default is ``catalog``) or the application will not work.
 * Flask's ``secret_key`` which is used for session cryptography
 
-  * To generate a good key run ``$ python -c 'import os; print(os.urandom(16))'``
+  * To generate a good key run ``$ python3 -c 'import secrets; print(secrets.token_bytes(16))'``
 
 An example ``secrets.py`` file would be as follows:
 
