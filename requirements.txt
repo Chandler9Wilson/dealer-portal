@@ -16,7 +16,7 @@ Flask-Principal==0.4.0
 Flask-SQLAlchemy==2.3.2
 google-auth==1.4.1
 gunicorn==19.7.1
-httplib2==0.11.3
+httplib2==0.18.0
 idna==2.6
 imagesize==1.0.0
 itsdangerous==0.24
